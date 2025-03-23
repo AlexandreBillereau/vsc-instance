@@ -5,17 +5,17 @@
 }
 
 .new-editor-container h2 {
-  color: #172b4d;
+  color: var(--color-text);
   margin-bottom: 2rem;
   font-size: 1.5rem;
   font-weight: 600;
 }
 
 .new-editor-form {
-  background: #ffffff;
+  background: var(--color-bg-primary);
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(9, 30, 66, 0.08);
+  box-shadow: var(--shadow-card);
 }
 
 .form-group {
@@ -24,7 +24,7 @@
 
 .form-group label {
   display: block;
-  color: #172b4d;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
@@ -33,23 +33,23 @@
 .form-group select {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid rgba(9, 30, 66, 0.1412);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background-color: #fafbfc;
-  color: #172b4d;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text);
   font-size: 1rem;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #0c66e4;
-  box-shadow: 0 0 0 2px rgba(12, 102, 228, 0.2);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-pressed);
 }
 
 .submit-button {
-  background-color: #0c66e4;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-bg-primary);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 4px;
@@ -61,9 +61,9 @@
 }
 
 .submit-button:hover {
-  background-color: #0055cc;
+  background-color: var(--color-primary-hover);
 }
 
 .submit-button:active {
-  background-color: #09326c;
+  background-color: var(--color-primary-pressed);
 }
