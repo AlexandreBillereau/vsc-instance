@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Instance.css';
-
+import { loadInstances } from '../../App';
 export function Instance() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -12,6 +12,7 @@ export function Instance() {
 
   const handleDelete = async () => {
     await window.electron.ipcRenderer.invoke('delete-editor-instance', id);
+    loadInstances();
     navigate('/');
   };
 

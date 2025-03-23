@@ -8,8 +8,10 @@ interface Instance {
   type: 'vscode' | 'cursor';
 }
 
+//signal 
+import { instances } from '../../App';
+
 export function Navigation() {
-  const [instances, setInstances] = useState<Instance[]>([]);
   const [isDark, setIsDark] = useState(() => {
     // Get theme from localStorage or system preference
     const savedTheme = localStorage.getItem('theme');
@@ -20,13 +22,6 @@ export function Navigation() {
   });
 
   useEffect(() => {
-    const loadInstances = async () => {
-      const list = await window.electron.ipcRenderer.invoke('list-editor-instances');
-      setInstances(list);
-    };
-
-    loadInstances();
-
     // Listen for system theme changes
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e: MediaQueryListEvent) => {
@@ -81,7 +76,7 @@ export function Navigation() {
 
       <div className="nav-content">
         <div className="instances-section">
-          {instances.map(instance => (
+          {instances.value.map(instance => (
             <NavLink 
               key={instance.id}
               to={`/instance/${instance.id}`} 
