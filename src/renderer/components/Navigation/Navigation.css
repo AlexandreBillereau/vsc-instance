@@ -16,17 +16,22 @@
 
 .nav-header h1 {
   color: #172b4d;
-  font-size: 20px;
+  font-size: 31px;
   font-weight: 600;
   margin: 0 0 8px 0;
+}
+.nav-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .version-tag {
   display: inline-block;
-  background-color: #ebecf0;
-  color: #172b4d;
-  padding: 2px 8px;
-  border-radius: 3px;
+  background-color: #0c66e4;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -35,6 +40,10 @@
   color: #172b4d;
   opacity: 0.7;
   transition: opacity 0.2s;
+}
+.github-link svg {
+  height: 15px;
+  width: 15px;
 }
 
 .github-link:hover {
