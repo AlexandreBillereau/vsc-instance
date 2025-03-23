@@ -3,6 +3,11 @@ import icon from '../../assets/icon.svg';
 import './App.css';
 
 function Hello() {
+  const handleOpenEditor = () => {
+    console.log('open editor');
+    window.electron.ipcRenderer.invoke('open-editor');
+  };
+
   return (
     <div>
       <div className="Hello">
@@ -34,6 +39,9 @@ function Hello() {
             Donate
           </button>
         </a>
+        <button type="button" onClick={handleOpenEditor}>
+          Open Editor
+        </button>
       </div>
     </div>
   );
