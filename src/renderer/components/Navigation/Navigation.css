@@ -1,8 +1,8 @@
 .nav-panel {
   width: 250px;
   height: 100vh;
-  background-color: #f4f5f7;
-  border-right: 1px solid rgba(9, 30, 66, 0.1412);
+  background-color: var(--color-bg-secondary);
+  border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   padding: 16px;
@@ -10,16 +10,17 @@
 
 .nav-header {
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(9, 30, 66, 0.1412);
+  border-bottom: 1px solid var(--color-border);
   margin-bottom: 16px;
 }
 
 .nav-header h1 {
-  color: #172b4d;
+  color: var(--color-text);
   font-size: 31px;
   font-weight: 600;
   margin: 0 0 8px 0;
 }
+
 .nav-header-top {
   display: flex;
   justify-content: space-between;
@@ -28,8 +29,8 @@
 
 .version-tag {
   display: inline-block;
-  background-color: #0c66e4;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-bg-primary);
   padding: 4px 8px;
   border-radius: 8px;
   font-size: 12px;
@@ -37,10 +38,11 @@
 }
 
 .github-link {
-  color: #172b4d;
+  color: var(--color-text);
   opacity: 0.7;
   transition: opacity 0.2s;
 }
+
 .github-link svg {
   height: 15px;
   width: 15px;
@@ -67,7 +69,7 @@
   gap: 8px;
   padding: 8px 12px;
   border-radius: 3px;
-  color: #172b4d;
+  color: var(--color-text);
   text-decoration: none;
   font-size: 14px;
   background-color: transparent;
@@ -75,12 +77,12 @@
 }
 
 .nav-item:hover {
-  background-color: #ebecf0;
+  background-color: var(--color-bg-tertiary);
 }
 
 .nav-item.active {
-  background-color: #ebecf0;
-  color: #0c66e4;
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-primary);
 }
 
 .nav-item svg {
@@ -90,17 +92,38 @@
 
 .add-editor {
   margin-top: 8px;
-  color: #0c66e4;
+  color: var(--color-primary);
 }
 
 .nav-footer {
   padding-top: 16px;
-  border-top: 1px solid rgba(9, 30, 66, 0.1412);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  box-shadow: none;
+}
+
+.theme-toggle:hover {
+  color: var(--color-primary);
+  transform: none;
 }
 
 .nav-title {
   text-decoration: none;
-  color: #172b4d;
+  color: var(--color-text);
   cursor: pointer;
   display: flex;
   align-items: center;

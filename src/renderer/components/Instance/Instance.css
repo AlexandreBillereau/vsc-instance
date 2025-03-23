@@ -9,7 +9,7 @@
 }
 
 .instance-header h2 {
-  color: #172b4d;
+  color: var(--color-text);
   font-size: 1.5rem;
   font-weight: 600;
 }
@@ -30,26 +30,27 @@
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
 }
 
 .open-button {
-  background-color: #0c66e4;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-bg-primary);
 }
 
 .open-button:hover {
-  background-color: #0055cc;
+  background-color: var(--color-primary-hover);
   transform: none;
 }
 
 .delete-button {
-  background-color: #ffffff;
-  color: #de350b;
-  border: 1px solid #de350b;
+  background-color: var(--color-bg-primary);
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
 }
 
 .delete-button:hover {
-  background-color: #ffebe6;
+  background-color: var(--color-error);
+  color: var(--color-bg-primary);
   transform: none;
 }

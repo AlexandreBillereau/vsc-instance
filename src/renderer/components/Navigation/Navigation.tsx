@@ -10,6 +10,14 @@ interface Instance {
 
 export function Navigation() {
   const [instances, setInstances] = useState<Instance[]>([]);
+  const [isDark, setIsDark] = useState(() => {
+    // Get theme from localStorage or system preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      return savedTheme === 'dark';
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
   useEffect(() => {
     const loadInstances = async () => {
@@ -18,7 +26,35 @@ export function Navigation() {
     };
 
     loadInstances();
+
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (!localStorage.getItem('theme')) {
+        setIsDark(e.matches);
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
+
+  useEffect(() => {
+    // Apply theme to document
+    document.documentElement.classList.toggle('dark', isDark);
+    // Save theme preference
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+    // Force a repaint to ensure the theme is applied
+    const root = document.documentElement;
+    root.style.display = 'none';
+    root.offsetHeight; // Force reflow
+    root.style.display = '';
+  }, [isDark]);
+
+  const toggleTheme = () => {
+    setIsDark(prev => !prev);
+  };
 
   return (
     <nav className="nav-panel">
@@ -81,6 +117,19 @@ export function Navigation() {
           </svg>
           Settings
         </NavLink>
+
+        <button className="theme-toggle" onClick={toggleTheme}>
+          {isDark ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          )}
+          {isDark ? 'Light Mode' : 'Dark Mode'}
+        </button>
       </div>
     </nav>
   );
