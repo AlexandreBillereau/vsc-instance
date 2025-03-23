@@ -112,6 +112,8 @@
   },
   "devDependencies": {
     "@electron/rebuild": "^3.7.1",
+    "@preact/signals": "^2.0.0",
+    "@preact/signals-react": "^2.3.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "@svgr/webpack": "^8.1.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
