@@ -2,13 +2,123 @@
  * @NOTE: Prepend a `~` to css file paths that are in your node_modules
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
+
+@font-face {
+  font-family: 'Jakarta';
+  src: url('../../assets/fonts/PlusJakartaSans-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Jakarta';
+  src: url('../../assets/fonts/PlusJakartaSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Jakarta';
+  src: url('../../assets/fonts/PlusJakartaSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Jakarta';
+  src: url('../../assets/fonts/PlusJakartaSans-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Jakarta';
+  src: url('../../assets/fonts/PlusJakartaSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Jakarta';
+  src: url('../../assets/fonts/PlusJakartaSans-ExtraBold.ttf')
+    format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+:root {
+  --font-family:
+    'Jakarta', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+
+  /* Primary Colors */
+  --color-primary: light-dark(#0c66e4, #579dff);
+  --color-primary-hover: light-dark(#0055cc, #85b8ff);
+  --color-primary-pressed: light-dark(#09326c, #cce0ff);
+
+  /* Text Colors */
+  --color-text: light-dark(#172b4d, #c7d1db);
+  --color-text-subtle: light-dark(#44546f, #8c9bab);
+  --color-text-link: var(--color-primary);
+
+  /* Background Colors */
+  --color-bg-primary: light-dark(#ffffff, #1d2125);
+  --color-bg-secondary: light-dark(#f4f5f7, #22272b);
+  --color-bg-tertiary: light-dark(#ebecf0, #2c333a);
+  --color-bg-overlay: light-dark(
+    rgba(255, 255, 255, 0.9),
+    rgba(9, 30, 66, 0.9)
+  );
+
+  /* Border Colors */
+  --color-border: light-dark(
+    rgba(9, 30, 66, 0.1412),
+    rgba(255, 255, 255, 0.1412)
+  );
+  --color-border-focused: var(--color-primary);
+
+  /* Status Colors */
+  --color-success: light-dark(#36b37e, #4bce97);
+  --color-warning: light-dark(#ffab00, #e2b203);
+  --color-error: light-dark(#de350b, #ff5630);
+  --color-info: light-dark(#0065ff, #2684ff);
+
+  /* Neutral Colors */
+  --color-neutral-subtle: light-dark(#f4f5f7, #22272b);
+  --color-neutral: light-dark(#dfe1e6, #454f59);
+  --color-neutral-bold: light-dark(#42526e, #8c9bab);
+
+  /* Shadow Effects */
+  --shadow-overlay: light-dark(
+    0px 8px 28px -6px rgba(24, 39, 75, 0.12),
+    0px 8px 28px -6px rgba(0, 0, 0, 0.24)
+  );
+  --shadow-card: light-dark(
+    0px 1px 1px rgba(9, 30, 66, 0.25),
+    0px 1px 1px rgba(0, 0, 0, 0.5)
+  );
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, sans-serif;
-  background-color: #fafbfc;
-  color: #172b4d;
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text);
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-family);
 }
 
 .app-container {
@@ -21,43 +131,33 @@ body {
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
-  background-color: #fafbfc;
+  background-color: var(--color-bg-secondary);
 }
 
 /* Reset default styles */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-button {
-  font-family: inherit;
-}
-
 a {
   text-decoration: none;
-  color: inherit;
+  color: var(--color-text-link);
 }
 
 button {
-  background-color: white;
+  background-color: var(--color-bg-primary);
   padding: 10px 20px;
   border-radius: 10px;
-  border: none;
+  border: 1px solid var(--color-border);
   appearance: none;
   font-size: 1.3rem;
-  box-shadow:
-    0px 8px 28px -6px rgba(24, 39, 75, 0.12),
-    0px 18px 88px -4px rgba(24, 39, 75, 0.14);
+  box-shadow: var(--shadow-overlay);
   transition: all ease-in 0.1s;
   cursor: pointer;
   opacity: 0.9;
+  color: var(--color-text);
 }
 
 button:hover {
   transform: scale(1.05);
   opacity: 1;
+  border-color: var(--color-border-focused);
 }
 
 li {
@@ -67,6 +167,7 @@ li {
 a:hover {
   opacity: 1;
   text-decoration: none;
+  color: var(--color-primary-hover);
 }
 
 .Hello {
