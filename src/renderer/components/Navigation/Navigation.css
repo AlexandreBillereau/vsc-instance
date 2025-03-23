@@ -1,0 +1,108 @@
+.nav-panel {
+  width: 250px;
+  height: 100vh;
+  background-color: #f4f5f7;
+  border-right: 1px solid rgba(9, 30, 66, 0.1412);
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.nav-header {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(9, 30, 66, 0.1412);
+  margin-bottom: 16px;
+}
+
+.nav-header h1 {
+  color: #172b4d;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.version-tag {
+  display: inline-block;
+  background-color: #ebecf0;
+  color: #172b4d;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.github-link {
+  color: #172b4d;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.github-link:hover {
+  opacity: 1;
+}
+
+.nav-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.instances-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 3px;
+  color: #172b4d;
+  text-decoration: none;
+  font-size: 14px;
+  background-color: transparent;
+  transition: background-color 0.2s;
+}
+
+.nav-item:hover {
+  background-color: #ebecf0;
+}
+
+.nav-item.active {
+  background-color: #ebecf0;
+  color: #0c66e4;
+}
+
+.nav-item svg {
+  width: 16px;
+  height: 16px;
+}
+
+.add-editor {
+  margin-top: 8px;
+  color: #0c66e4;
+}
+
+.nav-footer {
+  padding-top: 16px;
+  border-top: 1px solid rgba(9, 30, 66, 0.1412);
+}
+
+.nav-title {
+  text-decoration: none;
+  color: #172b4d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: opacity 0.2s ease;
+}
+
+.nav-title:hover {
+  opacity: 0.8;
+}
+
+.nav-title h1 {
+  margin: 0;
+}
