@@ -3,20 +3,41 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 body {
-  position: relative;
-  color: white;
-  height: 100vh;
-  background: linear-gradient(
-    200.96deg,
-    #fedc2a -29.09%,
-    #dd5789 51.77%,
-    #7a2c9e 129.35%
-  );
-  font-family: sans-serif;
-  overflow-y: hidden;
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  background-color: #fafbfc;
+  color: #172b4d;
+}
+
+.app-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: #fafbfc;
+}
+
+/* Reset default styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 button {
@@ -41,13 +62,6 @@ button:hover {
 
 li {
   list-style: none;
-}
-
-a {
-  text-decoration: none;
-  height: fit-content;
-  width: fit-content;
-  margin: 10px;
 }
 
 a:hover {

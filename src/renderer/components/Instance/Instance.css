@@ -1,0 +1,55 @@
+.instance-container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.instance-header {
+  margin-bottom: 2rem;
+}
+
+.instance-header h2 {
+  color: #172b4d;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.instance-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: none;
+}
+
+.open-button {
+  background-color: #0c66e4;
+  color: white;
+}
+
+.open-button:hover {
+  background-color: #0055cc;
+  transform: none;
+}
+
+.delete-button {
+  background-color: #ffffff;
+  color: #de350b;
+  border: 1px solid #de350b;
+}
+
+.delete-button:hover {
+  background-color: #ffebe6;
+  transform: none;
+}
