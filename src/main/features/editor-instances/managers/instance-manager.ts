@@ -71,23 +71,30 @@ export class InstanceManager {
     }
 
     // Ajouter les paramètres supplémentaires
-    if (instance.params.length > 0) {
+    if (instance.params && instance.params.length > 0) {
       args.push(...instance.params);
     }
 
     // Lancer l'éditeur
     const process = spawn(editorPath, args, {
-      detached: true,
       stdio: 'ignore',
-      windowsHide: true
+      windowsHide: false, //ne pas mettre a true, sinon y aura un proc invisible qui tourne
+      detached: true
     });
 
-    // Détacher le processus
     process.unref();
+
+    // Log pour debug
+    console.log('Lancement VS Code:', {
+      pid: process.pid,
+      path: editorPath,
+      args: args
+    });
 
     // Mettre à jour la date de dernière utilisation
     instance.lastUsed = new Date().toISOString();
     this.storage.updateInstance(instance);
+
   }
 
   /**
