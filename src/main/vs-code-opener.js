@@ -5,91 +5,202 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 
-class VSCodePathFinder {
-  static async findVSCodePath() {
-    const platform = os.platform();
-    
-    const commonPaths = {
-      win32: [
-        'C:\\Program Files\\Microsoft VS Code\\Code.exe',
-        'C:\\Program Files (x86)\\Microsoft VS Code\\Code.exe',
-        `${os.homedir()}\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe`,
-        `${os.homedir()}\\AppData\\Local\\Microsoft VS Code\\Code.exe`
-      ],
-      darwin: [
-        '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code',
-        '/usr/local/bin/code'
-      ],
-      linux: [
-        '/usr/bin/code',
-        '/usr/local/bin/code',
-        `${os.homedir()}/.local/bin/code`
-      ]
-    };
+class EditorFinder {
+  static async findWindowsVSCode() {
+    const commonPaths = [
+      'C:\\Program Files\\Microsoft VS Code\\Code.exe',
+      'C:\\Program Files (x86)\\Microsoft VS Code\\Code.exe',
+      `${os.homedir()}\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe`,
+      'C:\\Program Files\\Microsoft VS Code Insiders\\Code - Insiders.exe',
+      `${os.homedir()}\\AppData\\Local\\Programs\\Microsoft VS Code Insiders\\Code - Insiders.exe`,
+      'C:\\Program Files\\VSCodium\\VSCodium.exe',
+      `${os.homedir()}\\AppData\\Local\\Programs\\VSCodium\\VSCodium.exe`
+    ];
 
-    const paths = commonPaths[platform] || [];
-    
-    for (const path of paths) {
-      if (fs.existsSync(path)) {
-        return path;
-      }
+    // Vérifier d'abord les chemins communs
+    for (const path of commonPaths) {
+      if (fs.existsSync(path)) return path;
     }
 
-    if (platform === 'win32') {
-      try {
-        return new Promise((resolve, reject) => {
-          exec('where code.cmd', (error, stdout) => {
-            if (!error && stdout) {
-              const paths = stdout.split('\n').map(p => p.trim()).filter(Boolean);
-              if (paths.length > 0) {
-                resolve(paths[0]);
-                return;
-              }
-            }
-
-            exec('reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\code.exe" /ve', (error, stdout) => {
-              if (!error && stdout) {
-                const match = stdout.match(/REG_SZ\s+([^\n]+)/);
-                if (match && match[1]) {
-                  resolve(match[1].trim());
-                  return;
-                }
-              }
-
-              const programFiles = [
-                process.env['ProgramFiles'],
-                process.env['ProgramFiles(x86)'],
-                process.env['LOCALAPPDATA']
-              ].filter(Boolean);
-
-              for (const dir of programFiles) {
-                const possiblePath = path.join(dir, 'Microsoft VS Code', 'bin', 'code.cmd');
-                if (fs.existsSync(possiblePath)) {
-                  resolve(possiblePath);
-                  return;
-                }
-              }
-
-              reject(new Error('VS Code not found'));
-            });
-          });
+    try {
+      // Chercher via where
+      const whereResult = await new Promise((resolve) => {
+        exec('where Code.exe', (error, stdout) => {
+          if (!error && stdout) {
+            const paths = stdout.split('\n').map(p => p.trim()).filter(Boolean);
+            resolve(paths[0]);
+          }
+          resolve(null);
         });
-      } catch (e) {
-        console.log('Erreur lors de la recherche de VS Code sur Windows:', e);
-      }
-    } else {
-      try {
-        return new Promise((resolve, reject) => {
-          exec('which code', (error, stdout) => {
-            if (error) reject(error);
+      });
+      if (whereResult) return whereResult;
+
+      // Chercher dans le registre
+      const regResult = await new Promise((resolve) => {
+        exec('reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Code.exe" /ve', (error, stdout) => {
+          if (!error && stdout) {
+            const match = stdout.match(/REG_SZ\s+([^\n]+)/);
+            if (match && match[1]) resolve(match[1].trim());
+          }
+          resolve(null);
+        });
+      });
+      if (regResult) return regResult;
+    } catch (e) {
+      console.log('Erreur recherche VS Code Windows:', e);
+    }
+    return null;
+  }
+
+  static async findWindowsCursor() {
+    const commonPaths = [
+      `${os.homedir()}\\AppData\\Local\\Programs\\cursor\\Cursor.exe`,
+      'C:\\Program Files\\Cursor\\Cursor.exe',
+      'C:\\Program Files (x86)\\Cursor\\Cursor.exe'
+    ];
+
+    // Vérifier d'abord les chemins communs
+    for (const path of commonPaths) {
+      if (fs.existsSync(path)) return path;
+    }
+
+    try {
+      // Chercher via where
+      const whereResult = await new Promise((resolve) => {
+        exec('where Cursor.exe', (error, stdout) => {
+          if (!error && stdout) {
+            const paths = stdout.split('\n').map(p => p.trim()).filter(Boolean);
+            resolve(paths[0]);
+          }
+          resolve(null);
+        });
+      });
+      if (whereResult) return whereResult;
+
+      // Chercher dans le registre
+      const regResult = await new Promise((resolve) => {
+        exec('reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Cursor.exe" /ve', (error, stdout) => {
+          if (!error && stdout) {
+            const match = stdout.match(/REG_SZ\s+([^\n]+)/);
+            if (match && match[1]) resolve(match[1].trim());
+          }
+          resolve(null);
+        });
+      });
+      if (regResult) return regResult;
+    } catch (e) {
+      console.log('Erreur recherche Cursor Windows:', e);
+    }
+    return null;
+  }
+
+  static async findMacVSCode() {
+    const commonPaths = [
+      '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code',
+      '/usr/local/bin/code',
+      '/opt/homebrew/bin/code',
+      `${os.homedir()}/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code`
+    ];
+
+    // Vérifier les chemins communs
+    for (const path of commonPaths) {
+      if (fs.existsSync(path)) return path;
+    }
+
+    try {
+      // Utiliser which comme fallback
+      return new Promise((resolve) => {
+        exec('which code', (error, stdout) => {
+          resolve(error ? null : stdout.trim());
+        });
+      });
+    } catch (e) {
+      console.log('Erreur recherche VS Code Mac:', e);
+    }
+    return null;
+  }
+
+  static async findMacCursor() {
+    const commonPaths = [
+      '/Applications/Cursor.app/Contents/MacOS/Cursor',
+      `${os.homedir()}/Applications/Cursor.app/Contents/MacOS/Cursor`
+    ];
+
+    // Vérifier les chemins communs
+    for (const path of commonPaths) {
+      if (fs.existsSync(path)) return path;
+    }
+
+    try {
+      // Utiliser which comme fallback
+      return new Promise((resolve) => {
+        exec('which cursor', (error, stdout) => {
+          resolve(error ? null : stdout.trim());
+        });
+      });
+    } catch (e) {
+      console.log('Erreur recherche Cursor Mac:', e);
+    }
+    return null;
+  }
+
+  static async findLinuxVSCode() {
+    const commonPaths = [
+      '/usr/bin/code',
+      '/usr/local/bin/code',
+      `${os.homedir()}/.local/bin/code`,
+      '/snap/bin/code',
+      '/usr/bin/codium',
+      '/usr/local/bin/codium'
+    ];
+
+    // Vérifier les chemins communs
+    for (const path of commonPaths) {
+      if (fs.existsSync(path)) return path;
+    }
+
+    try {
+      // Essayer which pour code et codium
+      return new Promise((resolve) => {
+        exec('which code', (error, stdout) => {
+          if (!error && stdout) {
             resolve(stdout.trim());
-          });
+          } else {
+            exec('which codium', (error2, stdout2) => {
+              resolve(error2 ? null : stdout2.trim());
+            });
+          }
         });
-      } catch (e) {
-        console.log('VS Code non trouvé via which');
-      }
+      });
+    } catch (e) {
+      console.log('Erreur recherche VS Code Linux:', e);
+    }
+    return null;
+  }
+
+  static async findLinuxCursor() {
+    const commonPaths = [
+      '/usr/bin/cursor',
+      '/usr/local/bin/cursor',
+      `${os.homedir()}/.local/bin/cursor`,
+      '/opt/cursor/cursor'
+    ];
+
+    // Vérifier les chemins communs
+    for (const path of commonPaths) {
+      if (fs.existsSync(path)) return path;
     }
 
+    try {
+      // Utiliser which comme fallback
+      return new Promise((resolve) => {
+        exec('which cursor', (error, stdout) => {
+          resolve(error ? null : stdout.trim());
+        });
+      });
+    } catch (e) {
+      console.log('Erreur recherche Cursor Linux:', e);
+    }
     return null;
   }
 }
@@ -170,7 +281,7 @@ class EditorInstance {
    */
   async open() {
     try {
-      this._vscodePath = await VSCodePathFinder.findVSCodePath();
+      this._vscodePath = await EditorFinder.findWindowsVSCode();
 
       if (this._vscodePath) {
         const args = ['--new-window'];
