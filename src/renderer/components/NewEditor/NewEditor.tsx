@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NewEditor.css';
+import { loadInstances } from '../../App';
 
 export function NewEditor() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export function NewEditor() {
       type
     });
 
-    navigate('/');
+    loadInstances();
   };
 
   return (
