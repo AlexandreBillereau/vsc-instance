@@ -87,10 +87,12 @@ export function Navigation() {
               to={`/instance/${instance.id}`} 
               className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z" />
-              </svg>
-              {instance.name}
+              <div className='active-indicator'></div>
+              <span className='nav-item-name'>{instance.name}</span>
+              <div className='nav-item-right-side'>
+                <div className="item-separator"></div>
+                <div className="item-icon"></div>
+              </div>
             </NavLink>
           ))}
 
