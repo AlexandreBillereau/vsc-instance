@@ -12,11 +12,12 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { exec, spawn } from 'child_process';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import process from 'process';
 import VSCodeOpener from './vs-code-opener';
+import { InstanceManager } from './features/editor-instances/managers/instance-manager';
+import { EditorInstanceConfig } from './features/editor-instances/types';
 
 class AppUpdater {
   constructor() {
@@ -32,6 +33,31 @@ ipcMain.handle('open-editor', () => {
   // Copier le PATH du système
   // Sur Windows
   VSCodeOpener.create().open();
+});
+
+// Créer une instance du manager
+const instanceManager = new InstanceManager();
+
+// Initialiser le manager au démarrage
+instanceManager.initialize().catch(error => {
+  console.error('Erreur lors de l\'initialisation du manager:', error);
+});
+
+// Exposer les méthodes via IPC
+ipcMain.handle('list-editor-instances', () => {
+  return instanceManager.listInstances();
+});
+
+ipcMain.handle('create-editor-instance', (event, config: EditorInstanceConfig) => {
+  return instanceManager.createInstance(config);
+});
+
+ipcMain.handle('open-editor-instance', (event, instanceId: string) => {
+  return instanceManager.openInstance(instanceId);
+});
+
+ipcMain.handle('delete-editor-instance', (event, instanceId: string) => {
+  return instanceManager.deleteInstance(instanceId);
 });
 
 if (process.env.NODE_ENV === 'production') {
