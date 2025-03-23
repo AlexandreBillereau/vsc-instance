@@ -1,0 +1,72 @@
+.instances-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.create-instance {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.create-instance input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.create-instance select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.instances-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.instance-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.instance-info h3 {
+  margin: 0 0 10px 0;
+  color: white;
+}
+
+.instance-info p {
+  margin: 5px 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.instance-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.instance-actions button {
+  flex: 1;
+  padding: 8px 15px;
+  font-size: 14px;
+}
+
+.delete-button {
+  background-color: rgba(255, 59, 48, 0.8) !important;
+  color: white !important;
+}
+
+.delete-button:hover {
+  background-color: rgb(255, 59, 48) !important;
+}

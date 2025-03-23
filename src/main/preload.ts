@@ -2,7 +2,15 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example' | 'open-editor';
+const channels = [
+  'open-editor',
+  'list-editor-instances',
+  'create-editor-instance',
+  'open-editor-instance',
+  'delete-editor-instance'
+] as const;
+
+type Channels = typeof channels[number];
 
 const electronHandler = {
   ipcRenderer: {
