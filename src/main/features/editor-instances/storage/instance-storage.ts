@@ -45,7 +45,8 @@ export class InstanceStorage {
       workspaceFolder: config.workspaceFolder,
       params: config.params || [],
       createdAt: new Date().toISOString(),
-      lastUsed: new Date().toISOString()
+      lastUsed: new Date().toISOString(),
+      icon: config.icon
     };
 
     instances.push(newInstance);

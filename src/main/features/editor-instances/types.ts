@@ -1,5 +1,16 @@
 export type EditorType = 'vscode' | 'cursor';
 
+export interface EditorInstanceConfig {
+  name: string;
+  type: EditorType;
+  workspaceFolder?: string;
+  params?: string[];
+  icon?: {
+    title: string;
+    svg: string;
+  };
+}
+
 export interface EditorInstance {
   id: string;
   name: string;
@@ -10,11 +21,8 @@ export interface EditorInstance {
   params: string[];
   createdAt: string;
   lastUsed: string;
-}
-
-export interface EditorInstanceConfig {
-  name: string;
-  type: EditorType;
-  workspaceFolder?: string;
-  params?: string[];
+  icon?: {
+    title: string;
+    svg: string;
+  };
 } 
