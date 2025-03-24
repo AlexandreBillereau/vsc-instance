@@ -1,0 +1,148 @@
+.home-container {
+  height: 100vh;
+  background-color: var(--color-bg-secondary);
+  overflow-y: auto;
+}
+
+.home-header {
+  position: sticky;
+  top: 0;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-primary);
+  padding: 16px;
+  z-index: 10;
+  margin: 10px auto;
+  max-width: 1200px;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-title h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+.instance-counter {
+  background-color: var(--color-primary);
+  color: var(--color-bg-primary);
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  opacity: 0.7;
+}
+
+.create-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background-color: var(--color-primary);
+  color: var(--color-bg-primary);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.create-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.create-button svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.instances-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  max-width: 1200px;
+  margin: 10px auto;
+}
+
+.instance-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background-color: var(--color-bg-primary);
+
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.instance-card:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+.instance-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-primary);
+  border-radius: 8px;
+  color: var(--color-text);
+}
+
+.instance-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.instance-icon svg path {
+  color: var(--color-bg-primary);
+}
+
+.instance-info {
+  flex: 1;
+}
+
+.instance-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.instance-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.instance-type {
+  text-transform: uppercase;
+  background-color: var(--color-primary);
+  color: var(--color-bg-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.instance-date {
+  font-family: monospace;
+}

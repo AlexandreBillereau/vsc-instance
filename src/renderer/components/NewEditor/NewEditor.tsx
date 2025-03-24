@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './NewEditor.css';
 import { loadInstances } from '../../App';
 import { IconPicker } from '../IconPicker/IconPicker';
+
 export function NewEditor() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
@@ -24,11 +25,14 @@ export function NewEditor() {
     });
 
     loadInstances();
+    navigate('/');
   };
 
   return (
     <div className="new-editor-container">
-      <h2>Add New Editor Instance</h2>
+      <div className="new-editor-header">
+        <h2>New Editor Instance</h2>
+      </div>
       
       <form onSubmit={handleSubmit} className="new-editor-form">
         <div className="form-group">
@@ -77,6 +81,9 @@ export function NewEditor() {
         </div>
 
         <button type="submit" className="submit-button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
           Create Instance
         </button>
       </form>

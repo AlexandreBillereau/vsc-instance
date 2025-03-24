@@ -1,5 +1,5 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import { InstancesList } from './components/InstancesList';
+import { Home } from './components/Home';
 import { NewEditor } from './components/NewEditor/NewEditor';
 import { Settings } from './components/Settings/Settings';
 import { Navigation } from './components/Navigation/Navigation';
@@ -31,7 +31,7 @@ export default function App() {
         <Navigation />
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<InstancesList />} />
+            <Route path="/" element={<Home />} />
             <Route path="/instance/:id" element={<Instance />} />
             <Route path="/new" element={<NewEditor />} />
             <Route path="/settings" element={<Settings />} />

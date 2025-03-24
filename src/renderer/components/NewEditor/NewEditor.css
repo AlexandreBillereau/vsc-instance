@@ -1,102 +1,133 @@
 .new-editor-container {
-  padding: 2rem;
-  max-width: 600px;
-  margin: 0 auto;
+  height: 100vh;
+  background-color: var(--color-bg-secondary);
+  overflow-y: auto;
 }
 
-.new-editor-container h2 {
+.new-editor-header {
+  position: sticky;
+  top: 0;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-primary);
+  padding: 16px;
+  z-index: 10;
+  margin: 10px auto;
+  max-width: 1200px;
+}
+
+.new-editor-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 400;
   color: var(--color-text);
-  margin-bottom: 2rem;
-  font-size: 1.5rem;
-  font-weight: 600;
 }
 
 .new-editor-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 2rem;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 10px auto;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
 }
 
 .form-group label {
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   color: var(--color-text);
+  opacity: 0.7;
 }
 
 .form-group input,
 .form-group select {
-  padding: 0.75rem;
+  padding: 8px 12px;
   border: 1px solid var(--color-border);
   border-radius: 4px;
   background-color: var(--color-bg-secondary);
   color: var(--color-text);
+  font-size: 14px;
+  transition: all 0.2s;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px var(--color-primary-pressed);
 }
 
 .icon-select-button {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
+  gap: 8px;
+  padding: 8px 12px;
   border: 1px solid var(--color-border);
   border-radius: 4px;
   background-color: var(--color-bg-secondary);
   color: var(--color-text);
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .icon-select-button:hover {
-  background-color: var(--color-bg-hover);
+  background-color: var(--color-bg-tertiary);
 }
 
 .selected-icon {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .selected-icon .icon-preview {
-  width: 24px;
-  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-primary);
+  border-radius: 4px;
 }
 
 .selected-icon .icon-preview svg {
-  width: 20px;
-  height: 20px;
-  fill: var(--color-text);
+  width: 16px;
+  height: 16px;
+  fill: var(--color-bg-primary);
 }
 
 .submit-button {
-  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
   background-color: var(--color-primary);
-  color: white;
+  color: var(--color-bg-primary);
   border: none;
-  border-radius: 4px;
-  font-weight: 500;
   cursor: pointer;
+  font-size: 14px;
   transition: background-color 0.2s;
+  margin-top: 16px;
 }
 
 .submit-button:hover {
-  background-color: var(--color-primary-dark);
+  background-color: var(--color-primary-hover);
 }
 
-.submit-button:active {
-  background-color: var(--color-primary-pressed);
+.submit-button svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
 }
