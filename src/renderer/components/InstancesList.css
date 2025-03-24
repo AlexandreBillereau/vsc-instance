@@ -56,12 +56,6 @@
   margin-top: 15px;
 }
 
-.instance-actions button {
-  flex: 1;
-  padding: 8px 15px;
-  font-size: 14px;
-}
-
 .delete-button {
   background-color: rgba(255, 59, 48, 0.8) !important;
   color: white !important;
