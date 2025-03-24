@@ -7,7 +7,8 @@ const channels = [
   'list-editor-instances',
   'create-editor-instance',
   'open-editor-instance',
-  'delete-editor-instance'
+  'delete-editor-instance',
+  'get-instance-extensions'
 ] as const;
 
 type Channels = typeof channels[number];

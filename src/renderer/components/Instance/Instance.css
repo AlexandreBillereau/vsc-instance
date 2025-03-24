@@ -1,56 +1,293 @@
 .instance-container {
-  padding: 2rem;
-  max-width: 800px;
-  margin: 0 auto;
+  padding: 16px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-secondary);
 }
 
 .instance-header {
-  margin-bottom: 2rem;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 16px;
 }
 
 .instance-header h2 {
   color: var(--color-text);
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 31px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.instance-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 16px;
+}
+
+.instance-details {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.instance-details-group {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 8px;
+}
+
+.instance-details-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.instance-details-label {
+  font-size: 14px;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.instance-details-value {
+  font-size: 14px;
+  color: var(--color-text);
+  font-family: monospace;
+  background-color: var(--color-bg-tertiary);
+  padding: 2px 6px;
+  border-radius: 3px;
 }
 
 .instance-actions {
   display: flex;
-  gap: 1rem;
+  gap: 4px;
+  margin-bottom: 24px;
 }
 
 .action-button {
+  position: relative;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 500;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 6px;
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 14px;
+  background-color: transparent;
+  transition: background-color 0.2s;
+  border: 1px solid var(--color-border);
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  box-shadow: var(--shadow-card);
+  width: fit-content;
+}
+
+.action-button svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.action-button:hover {
+  background-color: var(--color-bg-tertiary);
 }
 
 .open-button {
+  color: var(--color-text);
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.open-button:hover {
+  color: var(--color-primary);
+  background-color: var(--color-bg-tertiary);
+}
+
+.open-button .active-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  height: 40%;
+  background-color: var(--color-primary);
+  display: none;
+}
+
+.open-button:hover .active-indicator {
+  display: block;
+}
+
+.delete-button {
+  color: var(--color-text);
+}
+
+.delete-button:hover {
+  color: var(--color-error);
+  background-color: var(--color-bg-tertiary);
+}
+
+.delete-button .active-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  height: 40%;
+  background-color: var(--color-error);
+  display: none;
+}
+
+.delete-button:hover .active-indicator {
+  display: block;
+}
+
+.extensions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.extensions-list h2 {
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.extension-count {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text);
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  opacity: 0.7;
+}
+
+.extension-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 6px;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+}
+
+.extension-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.extension-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.extension-title h3 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text);
+  font-weight: normal;
+}
+
+.extension-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.extension-icon-placeholder {
+  width: 16px;
+  height: 16px;
+  background-color: var(--color-text);
+  color: var(--color-bg-primary);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.extension-version {
+  font-size: 12px;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.extension-publisher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.extension-description {
+  font-size: 12px;
+  color: var(--color-text);
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+.extension-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--color-text);
+  opacity: 0.7;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border);
+}
+
+.extension-id {
+  font-family: monospace;
+}
+
+.extension-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
   background-color: var(--color-primary);
   color: var(--color-bg-primary);
 }
 
-.open-button:hover {
-  background-color: var(--color-primary-hover);
-  transform: none;
+.extension-badge.pre-release {
+  background-color: var(--color-warning);
 }
 
-.delete-button {
-  background-color: var(--color-bg-primary);
-  color: var(--color-error);
-  border: 1px solid var(--color-error);
+.loading {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-secondary);
 }
 
-.delete-button:hover {
+.error {
+  padding: 1rem;
+  margin: 2rem 0;
   background-color: var(--color-error);
   color: var(--color-bg-primary);
-  transform: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
 }

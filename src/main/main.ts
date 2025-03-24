@@ -18,6 +18,7 @@ import process from 'process';
 import VSCodeOpener from './vs-code-opener';
 import { InstanceManager } from './features/editor-instances/managers/instance-manager';
 import { EditorInstanceConfig } from './features/editor-instances/types';
+import { InstanceInfo } from './features/editor-instances/managers/instance-info';
 
 class AppUpdater {
   constructor() {
@@ -58,6 +59,24 @@ ipcMain.handle('open-editor-instance', (event, instanceId: string) => {
 
 ipcMain.handle('delete-editor-instance', (event, instanceId: string) => {
   return instanceManager.deleteInstance(instanceId);
+});
+
+// Nouveau handler pour récupérer les extensions
+ipcMain.handle('get-instance-extensions', async (event, instanceId: string) => {
+  const instance = instanceManager.listInstances().find(i => i.id === instanceId);
+  if (!instance) {
+    throw new Error(`Instance ${instanceId} not found`);
+  }
+
+  const instanceInfo = new InstanceInfo(instance.extensionsDir);
+  const extensions = await instanceInfo.getInstalledExtensions();
+  
+  // Récupérer les détails pour chaque extension
+  const extensionsWithDetails = await Promise.all(
+    extensions.map(ext => instanceInfo.getExtensionDetails(ext))
+  );
+
+  return extensionsWithDetails;
 });
 
 if (process.env.NODE_ENV === 'production') {
