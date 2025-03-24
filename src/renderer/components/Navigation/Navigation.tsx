@@ -6,6 +6,7 @@ interface Instance {
   id: string;
   name: string;
   type: 'vscode' | 'cursor';
+  icon?: { svg: string };
 }
 
 //signal 
@@ -77,6 +78,7 @@ export function Navigation() {
       <div className="nav-content">
         <div className="instances-section">
           {instances.value.map(instance => (
+            console.log(instance),
             <NavLink 
               key={instance.id}
               to={`/instance/${instance.id}`} 
@@ -86,7 +88,9 @@ export function Navigation() {
               <span className='nav-item-name'>{instance.name}</span>
               <div className='nav-item-right-side'>
                 <div className="item-separator"></div>
-                <div className="item-icon"></div>
+                {instance.icon?.svg && (
+                  <div className="item-icon" dangerouslySetInnerHTML={{ __html: instance.icon.svg }} />
+                )}
               </div>
             </NavLink>
           ))}

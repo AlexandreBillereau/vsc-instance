@@ -12,32 +12,30 @@
 }
 
 .new-editor-form {
-  background: var(--color-bg-primary);
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .form-group label {
-  display: block;
-  color: var(--color-text);
-  margin-bottom: 0.5rem;
   font-weight: 500;
+  color: var(--color-text);
 }
 
 .form-group input,
 .form-group select {
-  width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--color-border);
   border-radius: 4px;
-  background-color: var(--color-bg-primary);
+  background-color: var(--color-bg-secondary);
   color: var(--color-text);
-  font-size: 1rem;
 }
 
 .form-group input:focus,
@@ -47,21 +45,56 @@
   box-shadow: 0 0 0 2px var(--color-primary-pressed);
 }
 
-.submit-button {
-  background-color: var(--color-primary);
-  color: var(--color-bg-primary);
-  border: none;
-  padding: 0.75rem 1.5rem;
+.icon-select-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  font-size: 1rem;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.icon-select-button:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.selected-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selected-icon .icon-preview {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selected-icon .icon-preview svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--color-text);
+}
+
+.submit-button {
+  padding: 0.75rem;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
   font-weight: 500;
   cursor: pointer;
-  width: 100%;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s;
 }
 
 .submit-button:hover {
-  background-color: var(--color-primary-hover);
+  background-color: var(--color-primary-dark);
 }
 
 .submit-button:active {

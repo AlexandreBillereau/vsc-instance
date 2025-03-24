@@ -1,10 +1,12 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Instance.css';
-import { loadInstances } from '../../App';
+import { loadInstances, instances } from '../../App';
+import { EditorInstance } from '../../../main/features/editor-instances/types';
 export function Instance() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const instance: EditorInstance | undefined = instances.value.find(instance => instance.id === id);
 
   const handleOpen = async () => {
     await window.electron.ipcRenderer.invoke('open-editor-instance', id);
@@ -20,6 +22,12 @@ export function Instance() {
     <div className="instance-container">
       <div className="instance-header">
         <h2>Instance Details</h2>
+      </div>
+
+      <div className="instance-details">
+        <p>Name: {instance?.name}</p>
+        <p>Type: {instance?.type}</p>
+        <p>Workspace Folder: {instance?.workspaceFolder}</p>
       </div>
       
       <div className="instance-actions">
