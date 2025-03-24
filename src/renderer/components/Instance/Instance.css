@@ -9,7 +9,7 @@
 .instance-header {
   padding-bottom: 16px;
   border-bottom: 1px solid var(--color-border);
-  margin-bottom: 16px;
+  margin: 16px 0;
 }
 
 .instance-header h2 {
