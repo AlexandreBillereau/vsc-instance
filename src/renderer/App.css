@@ -189,3 +189,73 @@ a:hover {
   align-items: center;
   margin: 20px 0;
 }
+
+/* Modern Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(115, 121, 126, 0.1);
+  border-radius: 100px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(115, 121, 126, 0.2);
+}
+
+/* For dark theme */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollable containers */
+.main-content,
+.new-editor-container,
+.instance-container,
+.extensions-list {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(115, 121, 126, 0.1) transparent;
+
+  /* Hide scrollbar by default */
+  &::-webkit-scrollbar-thumb {
+    opacity: 0;
+  }
+
+  /* Show on hover/scroll */
+  &:hover::-webkit-scrollbar-thumb,
+  &:focus::-webkit-scrollbar-thumb,
+  &:focus-within::-webkit-scrollbar-thumb {
+    opacity: 1;
+  }
+
+  /* Smooth appearance */
+  &:hover {
+    transition: scrollbar-color 0.3s ease;
+  }
+}
+
+/* Dark theme scrollable containers */
+.dark .main-content,
+.dark .new-editor-container,
+.dark .instance-container,
+.dark .extensions-list {
+  scrollbar-color: rgba(255, 255, 255, 0.05) transparent;
+
+  &:hover {
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  }
+}
