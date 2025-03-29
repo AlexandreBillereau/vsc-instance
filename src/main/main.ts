@@ -61,6 +61,10 @@ ipcMain.handle('delete-editor-instance', (event, instanceId: string) => {
   return instanceManager.deleteInstance(instanceId);
 });
 
+ipcMain.handle('sync-extensions', (event, instanceId: string) => {
+  return instanceManager.syncExtensions(instanceId);
+});
+
 // Nouveau handler pour récupérer les extensions
 ipcMain.handle('get-instance-extensions', async (event, instanceId: string) => {
   const instance = instanceManager.listInstances().find(i => i.id === instanceId);

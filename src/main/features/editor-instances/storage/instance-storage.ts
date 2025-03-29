@@ -3,6 +3,7 @@ import { APP_PATHS } from '../../shared/constants/paths';
 import { FileSystem } from '../../shared/utils/file-system';
 import { EditorInstance, EditorInstanceConfig } from '../types';
 import { CONST_NAMES } from '../../shared/constants/names';
+import * as fs from 'fs';
 
 interface InstancesData {
   instances: EditorInstance[];
@@ -146,5 +147,81 @@ export class InstanceStorage {
 
   getTemplateInstance(): EditorInstance {
     return FileSystem.readJsonFile<EditorInstance>(APP_PATHS.INSTANCE_TEMPLATE_CONFIG, InstanceStorage.DEFAULT_TEMPLATE_DATA);
+  }
+
+
+  /**
+   * Synchronise les extensions d'une instance avec le template core 
+   * 
+   */
+  async syncExtensions(instanceId: string): Promise<boolean> {
+    const instance = this.listInstances().find(i => i.id === instanceId);
+    if (!instance) {
+      throw new Error(`Instance ${instanceId} non trouvée`);
+    }
+
+    const templateInstance = this.getTemplateInstance();
+
+    // Lire les extensions du template et de l'instance
+    const templateExtensionsFile = path.join(templateInstance.extensionsDir, 'extensions.json');
+    const instanceExtensionsFile = path.join(instance.extensionsDir, 'extensions.json');
+
+    const templateExtensions = fs.existsSync(templateExtensionsFile) 
+      ? FileSystem.readJsonFile<any[]>(templateExtensionsFile, [])
+      : [];
+
+    const instanceExtensions = fs.existsSync(instanceExtensionsFile)
+      ? FileSystem.readJsonFile<any[]>(instanceExtensionsFile, [])
+      : [];
+
+    // Créer un Map des extensions du template pour faciliter la recherche
+    const templateExtMap = new Map(
+      templateExtensions.map(ext => [ext.identifier.id, ext])
+    );
+
+    // Créer un Map des extensions de l'instance pour faciliter la recherche
+    const instanceExtMap = new Map(
+      instanceExtensions.map(ext => [ext.identifier.id, ext])
+    );
+
+    // Préparer le tableau final des extensions
+    const finalExtensions = [];
+
+    // 1. Copier les dossiers d'extensions du template qui ne sont pas dans l'instance
+    for (const [extId, templateExt] of templateExtMap) {
+      const templateExtDir = path.join(templateInstance.extensionsDir, templateExt.relativeLocation);
+      const instanceExtDir = path.join(instance.extensionsDir, templateExt.relativeLocation);
+
+      // Si l'extension n'existe pas dans l'instance, on la copie
+      if (!fs.existsSync(instanceExtDir)) {
+        FileSystem.copyDir(templateExtDir, instanceExtDir);
+      }
+
+      finalExtensions.push({
+        ...templateExt,
+        location: {
+          ...templateExt.location,
+          fsPath: instanceExtDir
+        }
+      });
+    }
+
+    // 2. Ajouter les extensions spécifiques à l'instance qui ne sont pas dans le template
+    for (const [extId, instanceExt] of instanceExtMap) {
+      if (!templateExtMap.has(extId)) {
+        finalExtensions.push({
+          ...instanceExt,
+          location: {
+            ...instanceExt.location,
+            fsPath: path.join(instance.extensionsDir, instanceExt.relativeLocation)
+          }
+        });
+      }
+    }
+
+    // Écrire le fichier extensions.json mis à jour dans l'instance
+    FileSystem.writeJsonFile(instanceExtensionsFile, finalExtensions);
+
+    return true;
   }
 } 

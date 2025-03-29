@@ -11,7 +11,8 @@ const channels = [
   'get-instance-extensions',
   'open-folder',
   'create-editor-instance-template',
-  'get-template-instance'
+  'get-template-instance',
+  'sync-extensions'
 ] as const;
 
 type Channels = typeof channels[number];

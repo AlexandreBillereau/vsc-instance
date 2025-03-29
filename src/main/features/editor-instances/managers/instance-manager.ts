@@ -120,4 +120,11 @@ export class InstanceManager {
   getTemplateInstance(): EditorInstance {
     return this.storage.getTemplateInstance();
   }
+
+  /**
+   * Synchronise les extensions d'une instance
+   */
+  syncExtensions(instanceId: string): Promise<boolean> {
+    return this.storage.syncExtensions(instanceId);
+  }
 } 
