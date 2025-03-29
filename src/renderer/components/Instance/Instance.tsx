@@ -63,6 +63,10 @@ export function Instance() {
     navigate('/');
   };
 
+  const handleOpenFolder = async (path: string) => {
+    await window.electron.ipcRenderer.invoke('open-folder', path);
+  };
+
   if (loading) {
     return <div className="loading">Loading extensions...</div>;
   }
@@ -71,6 +75,7 @@ export function Instance() {
     return <div className="error">{error}</div>;
   }
 
+  console.log("instance : ", instance);
   return (
     <div className="instance-container">
       <div className="instance-header">
@@ -89,12 +94,23 @@ export function Instance() {
               <span className="instance-details-value">{instance?.id}</span>
             </div>
           </div>
-          {instance?.workspaceFolder && (
-            <div className="instance-details-item">
-              <span className="instance-details-label">Workspace:</span>
-              <span className="instance-details-value">{instance.workspaceFolder}</span>
+          <div className="instance-folders">
+            <div className="instance-details-item folder-item">
+              <span className="instance-details-label">Instance Folder:</span>
+              <span className="instance-details-value">
+                {instance?.id}
+                <button 
+                  onClick={() => handleOpenFolder(instance?.instanceDir || '')}
+                  className="folder-button"
+                  title="Open instance folder"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+                  </svg>
+                </button>
+              </span>
             </div>
-          )}
+          </div>
         </div>
         
         <div className="instance-actions">

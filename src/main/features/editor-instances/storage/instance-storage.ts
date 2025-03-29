@@ -29,9 +29,9 @@ export class InstanceStorage {
     const instanceId = `instance-${Date.now()}`;
     
     // Créer les dossiers pour cette instance
-    const instancePath = path.join(APP_PATHS.INSTANCES_DIR, instanceId);
-    const userDataDir = path.join(instancePath, 'user-data');
-    const extensionsDir = path.join(instancePath, 'extensions');
+    const instanceDir = path.join(APP_PATHS.INSTANCES_DIR, instanceId);
+    const userDataDir = path.join(instanceDir, 'user-data');
+    const extensionsDir = path.join(instanceDir, 'extensions');
     
     FileSystem.ensureDir(userDataDir);
     FileSystem.ensureDir(extensionsDir);
@@ -40,6 +40,7 @@ export class InstanceStorage {
       id: instanceId,
       name: config.name,
       type: config.type,
+      instanceDir,
       userDataDir,
       extensionsDir,
       workspaceFolder: config.workspaceFolder,

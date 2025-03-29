@@ -79,6 +79,15 @@ ipcMain.handle('get-instance-extensions', async (event, instanceId: string) => {
   return extensionsWithDetails;
 });
 
+ipcMain.handle('open-folder', async (_event, path: string) => {
+  try {
+    await shell.openPath(path);
+  } catch (error) {
+    console.error('Error opening folder:', error);
+    throw error;
+  }
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();

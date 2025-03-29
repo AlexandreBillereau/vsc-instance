@@ -291,3 +291,47 @@
   border-radius: 4px;
   font-size: 0.875rem;
 }
+
+.instance-folders {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.folder-item {
+  display: flex;
+  align-items: center;
+}
+
+.folder-item .instance-details-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.folder-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  opacity: 0.7;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.folder-button:hover {
+  opacity: 1;
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-primary);
+}
