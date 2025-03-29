@@ -31,9 +31,7 @@
 .extensions-list {
   flex: 1;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  max-height: 600px;
 }
 
 .extension-item {
@@ -104,4 +102,4 @@
   text-align: center;
   padding: 32px;
   color: var(--color-text-subtle);
-} 
+}

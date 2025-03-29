@@ -189,3 +189,30 @@ a:hover {
   align-items: center;
   margin: 20px 0;
 }
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-bold);
+}
+
+/* Pour Firefox / For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral) var(--color-bg-secondary);
+}
