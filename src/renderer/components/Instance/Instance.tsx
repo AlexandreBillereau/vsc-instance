@@ -79,7 +79,11 @@ export function Instance() {
   return (
     <div className="instance-container">
       <div className="instance-header">
-        <h2>{instance?.name}</h2>
+        <div className="instance-header-top">
+          <div className="instance-icon" dangerouslySetInnerHTML={{ __html: instance?.icon?.svg || '' }} />
+          <h2>{instance?.name}</h2>
+         
+        </div>
       </div>
 
       <div className="instance-content">
