@@ -293,45 +293,88 @@
 }
 
 .instance-folders {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--color-border);
+  margin-top: 25px;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 16px;
+  width: 100%;
 }
 
 .folder-item {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: start;
+  gap: 12px;
 }
 
-.folder-item .instance-details-value {
+.folder-path {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  width: 100%;
   gap: 8px;
-  max-width: 100%;
+}
+
+.folder-path .instance-details-label {
+  font-size: 14px;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.folder-path .instance-details-value {
+  font-size: 14px;
+  color: var(--color-text);
+  font-family: monospace;
+  background-color: var(--color-bg-tertiary);
+  padding: 8px 12px;
+  border-radius: 6px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.folder-button {
+.folder-actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  border: none;
-  background: transparent;
-  color: var(--color-text);
-  opacity: 0.7;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s;
+  gap: 8px;
+  align-items: flex-start;
 }
 
-.folder-button:hover {
-  opacity: 1;
+.folder-actions .action-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  box-shadow: none;
+  width: auto;
+}
+
+.folder-actions .action-button:hover {
   background-color: var(--color-bg-tertiary);
   color: var(--color-primary);
+}
+
+.folder-actions .button-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.folder-actions svg {
+  width: 16px;
+  height: 16px;
+}
+
+.folder-actions .action-button .button-text {
+  transition: color 0.2s;
+}
+
+.folder-actions .action-button:active {
+  transform: translateY(1px);
 }
