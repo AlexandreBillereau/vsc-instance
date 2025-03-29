@@ -88,6 +88,14 @@ ipcMain.handle('open-folder', async (_event, path: string) => {
   }
 });
 
+ipcMain.handle('create-editor-instance-template', () => {
+  return instanceManager.createInstanceTemplate();
+});
+
+ipcMain.handle('get-template-instance', () => {
+  return instanceManager.getTemplateInstance();
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();

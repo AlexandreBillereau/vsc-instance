@@ -3,6 +3,7 @@ import { EditorInstance, EditorInstanceConfig, EditorType } from '../types';
 import { InstanceStorage } from '../storage/instance-storage';
 import { VSCodeFinder } from '../finders/vscode-finder';
 import { CursorFinder } from '../finders/cursor-finder';
+import { CONST_NAMES } from '../../shared/constants/names';
 
 export class InstanceManager {
   private storage: InstanceStorage;
@@ -48,9 +49,11 @@ export class InstanceManager {
    * Ouvre une instance spécifique
    */
   async openInstance(instanceId: string): Promise<void> {
-    const instance = this.storage.listInstances().find(i => i.id === instanceId);
+    console.log(instanceId);
+    const instance = instanceId === CONST_NAMES.TEMPLATE_SPLUG ? this.storage.getTemplateInstance() : this.storage.listInstances().find(i => i.id === instanceId);
+
     if (!instance) {
-      throw new Error(`Instance ${instanceId} non trouvée`);
+        throw new Error(`Instance ${instanceId} non trouvée`);
     }
 
     const editorPath = this.editorPaths[instance.type];
@@ -102,5 +105,19 @@ export class InstanceManager {
    */
   deleteInstance(instanceId: string): void {
     this.storage.deleteInstance(instanceId);
+  }
+
+  /**
+   * Crée une instance de template
+   */
+  createInstanceTemplate(): Promise<EditorInstance> {
+    return this.storage.createInstanceTemplate();
+  }
+
+  /**
+   * Récupère l'instance de template
+   */
+  getTemplateInstance(): EditorInstance {
+    return this.storage.getTemplateInstance();
   }
 } 
