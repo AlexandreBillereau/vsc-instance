@@ -9,7 +9,10 @@ const channels = [
   'open-editor-instance',
   'delete-editor-instance',
   'get-instance-extensions',
-  'open-folder'
+  'open-folder',
+  'search-extensions',
+  'add-core-extension',
+  'get-settings'
 ] as const;
 
 type Channels = typeof channels[number];
