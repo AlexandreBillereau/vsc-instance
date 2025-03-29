@@ -35,8 +35,14 @@ export class InstanceStorage {
     const userDataDir = path.join(instanceDir, 'user-data');
     const extensionsDir = path.join(instanceDir, 'extensions');
     
-    FileSystem.ensureDir(userDataDir);
-    FileSystem.ensureDir(extensionsDir);
+    if (config.useTemplate) {
+      const templateInstance = this.getTemplateInstance();
+      FileSystem.copyDir(templateInstance.userDataDir, userDataDir);
+      FileSystem.copyDir(templateInstance.extensionsDir, extensionsDir);
+    } else {
+      FileSystem.ensureDir(userDataDir);
+      FileSystem.ensureDir(extensionsDir);
+    }
 
     const newInstance: EditorInstance = {
       id: instanceId,

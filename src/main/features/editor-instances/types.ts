@@ -9,6 +9,7 @@ export interface EditorInstanceConfig {
     title: string;
     svg: string;
   };
+  useTemplate?: boolean;
 }
 
 export interface EditorInstance {
