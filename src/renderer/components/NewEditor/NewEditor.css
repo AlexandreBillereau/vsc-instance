@@ -168,3 +168,18 @@
   height: 1rem;
   stroke: currentColor;
 }
+
+.form-group label.required::after {
+  content: '*';
+  color: var(--color-error);
+  margin-left: 0.25rem;
+}
+
+.form-group.has-error input[type='text'],
+.form-group.has-error select {
+  border-color: var(--color-error);
+}
+
+.form-group.has-error .field-description {
+  color: var(--color-error);
+}
