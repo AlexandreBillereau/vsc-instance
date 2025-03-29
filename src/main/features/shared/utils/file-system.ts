@@ -57,5 +57,12 @@ export const FileSystem = {
     if (fs.existsSync(sourceDir)) {
       fs.cpSync(sourceDir, targetDir, { recursive: true });
     }
+  },
+
+  /**
+   * Lister les dossiers dans un dossier
+   */
+  listDirsIn(dirPath: string): string[] {
+    return fs.readdirSync(dirPath);
   }
 }; 
