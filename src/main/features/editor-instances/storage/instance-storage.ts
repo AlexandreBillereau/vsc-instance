@@ -12,7 +12,7 @@ export class InstanceStorage {
 
   constructor() {
     // Initialiser le stockage
-    FileSystem.ensureDir(APP_PATHS.EDITOR_INSTANCES);
+    FileSystem.ensureDir(APP_PATHS.ROOT);
     FileSystem.ensureDir(APP_PATHS.INSTANCES_DIR);
     
     // Créer le fichier de configuration s'il n'existe pas

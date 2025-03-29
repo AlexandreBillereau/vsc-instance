@@ -7,13 +7,13 @@ export const APP_PATHS = {
   
   // Dossier des instances d'éditeur
   // example: C:\Users\user\AppData\Roaming\editor-instances
-  EDITOR_INSTANCES: path.join(app.getPath('userData'), 'editor-instances'),
+  ROOT: path.join(app.getPath('userData')),
   
   // Fichier de configuration des instances
   // example: C:\Users\user\AppData\Roaming\editor-instances\instances.json
-  INSTANCES_CONFIG: path.join(app.getPath('userData'), 'editor-instances', 'instances.json'),
+  INSTANCES_CONFIG: path.join(app.getPath('userData'), 'instances', 'instances.json'),
   
   // Dossier contenant les instances
   // example: C:\Users\user\AppData\Roaming\editor-instances\instances
-  INSTANCES_DIR: path.join(app.getPath('userData'), 'editor-instances', 'instances')
+  INSTANCES_DIR: path.join(app.getPath('userData'), 'instances')
 }; 
