@@ -12,7 +12,6 @@ export function NewEditor() {
   const [useTemplate, setUseTemplate] = useState(false);
   const [showIconPicker, setShowIconPicker] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState<{ title: string; svg: string } | null>(null);
-
   const [templateInstance, setTemplateInstance] = useState<EditorInstance | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,6 +57,9 @@ export function NewEditor() {
             placeholder="My Editor Instance"
             required
           />
+          <span className="field-description">
+            Choose a descriptive name for your editor instance (e.g., "Python Development", "Web Projects")
+          </span>
         </div>
 
         <div className="form-group">
@@ -70,6 +72,9 @@ export function NewEditor() {
             <option value="vscode">VS Code</option>
             <option value="cursor">Cursor</option>
           </select>
+          <span className="field-description">
+            Select your preferred editor. Each instance will be completely isolated from others.
+          </span>
         </div>
 
         <div className="form-group">
@@ -91,17 +96,25 @@ export function NewEditor() {
               <span>Choose Icon</span>
             )}
           </button>
+          <span className="field-description">
+            Add a visual identifier to easily recognize this instance in the sidebar
+          </span>
         </div>
 
         {templateInstance && (
           <div className="form-group">
-            <label>Instance Path</label>
-            <input
-            id="template-instance"
-            type="checkbox"
-            checked={useTemplate}
-              onChange={(e) => setUseTemplate(e.target.checked)}
-            />
+            <div className="checkbox-container">
+              <input
+                id="use-template"
+                type="checkbox"
+                checked={useTemplate}
+                onChange={(e) => setUseTemplate(e.target.checked)}
+              />
+              <label htmlFor="use-template">Use Core Template</label>
+            </div>
+            <span className="field-description">
+              Start with extensions and settings from your Core Template. Recommended for consistency across instances.
+            </span>
           </div>
         )}
 
