@@ -88,9 +88,7 @@ export function Navigation() {
               <span className='nav-item-name'>{instance.name}</span>
               <div className='nav-item-right-side'>
                 <div className="item-separator"></div>
-                {instance.icon?.svg && (
-                  <div className="item-icon" dangerouslySetInnerHTML={{ __html: instance.icon.svg }} />
-                )}
+                <div className="item-icon" dangerouslySetInnerHTML={{ __html: instance.icon?.svg || '' }} />
               </div>
             </NavLink>
           ))}

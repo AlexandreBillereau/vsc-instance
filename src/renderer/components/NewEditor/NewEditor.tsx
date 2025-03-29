@@ -13,13 +13,28 @@ export function NewEditor() {
   const [showIconPicker, setShowIconPicker] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState<{ title: string; svg: string } | null>(null);
   const [templateInstance, setTemplateInstance] = useState<EditorInstance | null>(null);
+  const [errors, setErrors] = useState<{ name?: string; type?: string }>({});
+
+  const validateForm = () => {
+    const newErrors: { name?: string; type?: string } = {};
+    
+    if (!name.trim()) {
+      newErrors.name = 'Instance name is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name) return;
+    
+    if (!validateForm()) {
+      return;
+    }
 
     await window.electron.ipcRenderer.invoke('create-editor-instance', {
-      name,
+      name: name.trim(),
       type,
       icon: selectedIcon ? {
         title: selectedIcon.title,
@@ -47,18 +62,23 @@ export function NewEditor() {
       </div>
       
       <form onSubmit={handleSubmit} className="new-editor-form">
-        <div className="form-group">
-          <label htmlFor="name">Instance Name</label>
+        <div className={`form-group ${errors.name ? 'has-error' : ''}`}>
+          <label htmlFor="name" className="required">Instance Name</label>
           <input
             id="name"
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+              if (errors.name) {
+                setErrors({ ...errors, name: undefined });
+              }
+            }}
             placeholder="My Editor Instance"
             required
           />
           <span className="field-description">
-            Choose a descriptive name for your editor instance (e.g., "Python Development", "Web Projects")
+            {errors.name || 'Choose a descriptive name for your editor instance (e.g., "Python Development", "Web Projects")'}
           </span>
         </div>
 
