@@ -96,19 +96,51 @@ export function Instance() {
           </div>
           <div className="instance-folders">
             <div className="instance-details-item folder-item">
-              <span className="instance-details-label">Instance Folder:</span>
-              <span className="instance-details-value">
-                {instance?.id}
+              <div className="folder-path">
+                <span className="instance-details-label">Instance Folder:</span>
+                <span className="instance-details-value" title={instance?.instanceDir}>
+                  {instance?.instanceDir}
+                </span>
+              </div>
+              <div className="folder-actions">
                 <button 
                   onClick={() => handleOpenFolder(instance?.instanceDir || '')}
-                  className="folder-button"
+                  className="action-button"
                   title="Open instance folder"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
-                  </svg>
+                  <div className="button-content">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+                    </svg>
+                    Open
+                  </div>
                 </button>
-              </span>
+                <button 
+                  onClick={() => {
+                    navigator.clipboard.writeText(instance?.instanceDir || '');
+                    const button = document.activeElement as HTMLButtonElement;
+                    const originalText = button.querySelector('.button-text')?.textContent;
+                    if (button && originalText) {
+                      const textElement = button.querySelector('.button-text');
+                      if (textElement) {
+                        textElement.textContent = 'Copied!';
+                        setTimeout(() => {
+                          textElement.textContent = originalText;
+                        }, 2000);
+                      }
+                    }
+                  }}
+                  className="action-button"
+                  title="Copy path to clipboard"
+                >
+                  <div className="button-content">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                    </svg>
+                    <span className="button-text">Copy</span>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         </div>
