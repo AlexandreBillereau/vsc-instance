@@ -48,5 +48,14 @@ export const FileSystem = {
     if (fs.existsSync(dirPath)) {
       fs.rmSync(dirPath, { recursive: true, force: true });
     }
+  },
+
+  /**
+   * Copie un dossier
+   */
+  copyDir(sourceDir: string, targetDir: string): void {
+    if (fs.existsSync(sourceDir)) {
+      fs.cpSync(sourceDir, targetDir, { recursive: true });
+    }
   }
 }; 

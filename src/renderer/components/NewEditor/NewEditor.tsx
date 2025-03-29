@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NewEditor.css';
 import { loadInstances } from '../../App';
 import { IconPicker } from '../IconPicker/IconPicker';
+import { EditorInstance } from '../../../main/features/editor-instances/types';
 
 export function NewEditor() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [type, setType] = useState<'vscode' | 'cursor'>('vscode');
+  const [useTemplate, setUseTemplate] = useState(false);
   const [showIconPicker, setShowIconPicker] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState<{ title: string; svg: string } | null>(null);
+
+  const [templateInstance, setTemplateInstance] = useState<EditorInstance | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,12 +25,21 @@ export function NewEditor() {
       icon: selectedIcon ? {
         title: selectedIcon.title,
         svg: selectedIcon.svg
-      } : undefined
+      } : undefined,
+      useTemplate
     });
 
     loadInstances();
     navigate('/');
   };
+
+  useEffect(() => {
+    const fetchTemplateInstance = async () => {
+      const instance = await window.electron.ipcRenderer.invoke('get-template-instance');
+      setTemplateInstance(instance);
+    }
+    fetchTemplateInstance();
+  }, []);
 
   return (
     <div className="new-editor-container">
@@ -79,6 +92,18 @@ export function NewEditor() {
             )}
           </button>
         </div>
+
+        {templateInstance && (
+          <div className="form-group">
+            <label>Instance Path</label>
+            <input
+            id="template-instance"
+            type="checkbox"
+            checked={useTemplate}
+              onChange={(e) => setUseTemplate(e.target.checked)}
+            />
+          </div>
+        )}
 
         <button type="submit" className="submit-button">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
