@@ -15,6 +15,7 @@ export interface EditorInstance {
   id: string;
   name: string;
   type: EditorType;
+  instanceDir: string;
   userDataDir: string;
   extensionsDir: string;
   workspaceFolder?: string;
