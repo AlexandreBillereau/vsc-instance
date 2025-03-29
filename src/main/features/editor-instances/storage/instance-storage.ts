@@ -2,6 +2,7 @@ import * as path from 'path';
 import { APP_PATHS } from '../../shared/constants/paths';
 import { FileSystem } from '../../shared/utils/file-system';
 import { EditorInstance, EditorInstanceConfig } from '../types';
+import { CONST_NAMES } from '../../shared/constants/names';
 
 interface InstancesData {
   instances: EditorInstance[];
@@ -9,6 +10,7 @@ interface InstancesData {
 
 export class InstanceStorage {
   private static readonly DEFAULT_DATA: InstancesData = { instances: [] };
+  private static readonly DEFAULT_TEMPLATE_DATA: EditorInstance;
 
   constructor() {
     // Initialiser le stockage
@@ -57,6 +59,39 @@ export class InstanceStorage {
   }
 
   /**
+   * Crée une instance de template
+   */
+  async createInstanceTemplate(): Promise<EditorInstance> {
+    // Créer les dossiers pour cette instance
+    const instanceDir = path.join(APP_PATHS.INSTANCE_TEMPLATE_DIR, CONST_NAMES.TEMPLATE_SPLUG);
+    const userDataDir = path.join(instanceDir, 'user-data');
+    const extensionsDir = path.join(instanceDir, 'extensions');
+    
+    //on s'assure que les dossiers existent sinon on les crée
+    FileSystem.ensureDir(userDataDir);
+    FileSystem.ensureDir(extensionsDir);
+
+    //on crée l'instance
+    const instance: EditorInstance = {
+      id: CONST_NAMES.TEMPLATE_SPLUG,
+      name: 'Template',
+      type: 'vscode',
+      instanceDir,
+      userDataDir,
+      extensionsDir,
+      workspaceFolder: undefined,
+      params: [],
+      createdAt: new Date().toISOString(),
+      lastUsed: new Date().toISOString(),
+      icon: undefined
+    };
+
+    this.saveTemplateInstance(instance);
+
+    return instance;
+  }
+
+  /**
    * Liste toutes les instances
    */
   listInstances(): EditorInstance[] {
@@ -97,5 +132,13 @@ export class InstanceStorage {
    */
   private saveInstances(instances: EditorInstance[]): void {
     FileSystem.writeJsonFile(APP_PATHS.INSTANCES_CONFIG, { instances });
+  }
+
+  private saveTemplateInstance(instance: EditorInstance): void {
+    FileSystem.writeJsonFile(APP_PATHS.INSTANCE_TEMPLATE_CONFIG, instance);
+  }
+
+  getTemplateInstance(): EditorInstance {
+    return FileSystem.readJsonFile<EditorInstance>(APP_PATHS.INSTANCE_TEMPLATE_CONFIG, InstanceStorage.DEFAULT_TEMPLATE_DATA);
   }
 } 
