@@ -19,6 +19,7 @@ import VSCodeOpener from './vs-code-opener';
 import { InstanceManager } from './features/editor-instances/managers/instance-manager';
 import { EditorInstanceConfig } from './features/editor-instances/types';
 import { InstanceInfo } from './features/editor-instances/managers/instance-info';
+import { MarketplaceService } from './features/editor-instances/services/marketplace-service';
 
 class AppUpdater {
   constructor() {
@@ -86,6 +87,11 @@ ipcMain.handle('open-folder', async (_event, path: string) => {
     console.error('Error opening folder:', error);
     throw error;
   }
+});
+
+// Ajouter ce nouveau handler
+ipcMain.handle('search-extensions', async (_event, query: string) => {
+  return MarketplaceService.searchExtensions(query);
 });
 
 if (process.env.NODE_ENV === 'production') {

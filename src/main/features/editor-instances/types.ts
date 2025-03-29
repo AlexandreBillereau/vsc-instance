@@ -26,4 +26,21 @@ export interface EditorInstance {
     title: string;
     svg: string;
   };
+}
+
+export interface MarketplaceExtension {
+  identifier: {
+    id: string;
+  };
+  name: string;
+  displayName: string;
+  description: string;
+  publisher: string;
+  version: string;
+  preview?: boolean;
+  icon?: string;
+  stats?: {
+    downloadCount: number;
+    averageRating: number;
+  };
 } 
