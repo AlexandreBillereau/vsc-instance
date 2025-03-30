@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { APP_PATHS } from '../../shared/constants/paths';
 import { FileSystem } from '../../shared/utils/file-system';
-import { EditorInstance, EditorInstanceConfig } from '../types';
+import { EditorInstance, EditorInstanceConfig, IPCResult } from '../types';
 import { CONST_NAMES } from '../../shared/constants/names';
 import * as fs from 'fs';
 import archiver from 'archiver';
@@ -147,14 +147,31 @@ export class InstanceStorage {
 
   /**
    * Supprime une instance
+   * @returns {IPCResult} Résultat de l'opération
    */
-  deleteInstance(instanceId: string): void {
-    const instances = this.listInstances().filter(i => i.id !== instanceId);
-    this.saveInstances(instances);
+  deleteInstance(instanceId: string): IPCResult {
+    try {
+      const instances = this.listInstances().filter(i => i.id !== instanceId);
+      
+      // Supprimer les dossiers de l'instance
+      const instancePath = path.join(APP_PATHS.INSTANCES_DIR, instanceId);
+      FileSystem.removeDir(instancePath);
+      // On ne sauvegarde la nouvelle liste que si la suppression a réussi
+      this.saveInstances(instances);
 
-    // Supprimer les dossiers de l'instance
-    const instancePath = path.join(APP_PATHS.INSTANCES_DIR, instanceId);
-    FileSystem.removeDir(instancePath);
+      return { success: true };
+    } catch (error: any) {
+      if (error.code === 'EBUSY') {
+        return {
+          success: false,
+          message: 'VSCode window must be closed first'
+        };
+      }
+      return {
+        success: false,
+        message: 'Failed to delete instance'
+      };
+    }
   }
 
   /**

@@ -495,3 +495,135 @@
 .color-preview-button:active {
   transform: scale(0.95);
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--color-bg-primary);
+  border-radius: 8px;
+  padding: 24px;
+  width: 400px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+}
+
+.modal-content h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.modal-content p {
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.modal-button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid var(--color-border);
+}
+
+.modal-button.cancel {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text);
+}
+
+.modal-button.cancel:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+.modal-button.confirm {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.modal-button.confirm:hover {
+  opacity: 0.9;
+}
+
+.sync-extensions-button:hover:not(:disabled) {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-primary);
+}
+
+.sync-extensions-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.sync-extensions-button.is-syncing svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.action-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  margin: 0 0 16px 0;
+  border-radius: 6px;
+  font-size: 14px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.action-message svg {
+  flex-shrink: 0;
+}
+
+.action-message.warning {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning-border);
+}
+
+.action-message.error {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+  border: 1px solid var(--color-error-border);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

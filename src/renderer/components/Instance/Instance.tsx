@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Instance.css';
 import { loadInstances, instances } from '../../App';
-import { EditorInstance } from '../../../main/features/editor-instances/types';
+import { EditorInstance, IPCResult } from '../../../main/features/editor-instances/types';
 import { CONST_IPC_CHANNELS } from '../../../main/features/shared/constants/names';
 import { ColorPicker } from './ColorPicker';
 
@@ -38,6 +38,8 @@ export function Instance() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [showSyncConfirm, setShowSyncConfirm] = useState(false);
 
   const loadExtensions = async () => {
     try {
@@ -61,9 +63,14 @@ export function Instance() {
   };
 
   const handleDelete = async () => {
-    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.DELETE_EDITOR_INSTANCE, id);
-    loadInstances();
-    navigate('/');
+    const result: IPCResult = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.DELETE_EDITOR_INSTANCE, id);
+    
+    if (result.success) {
+      loadInstances();
+      navigate('/');
+    } else {
+      setError(result.message || 'An error occurred while deleting the instance');
+    }
   };
 
   const handleOpenFolder = async (path: string) => {
@@ -71,8 +78,15 @@ export function Instance() {
   };
 
   const handleSyncExtensions = async () => {
-    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.SYNC_EXTENSIONS, id);
-    loadExtensions();
+    try {
+      setIsSyncing(true);
+      await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.SYNC_EXTENSIONS, id);
+      await loadExtensions();
+    } catch (error) {
+      console.error('Failed to sync extensions:', error);
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const handleExportInstance = async () => {
@@ -94,11 +108,6 @@ export function Instance() {
   if (loading) {
     return <div className="loading">Loading extensions...</div>;
   }
-
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
-
   console.log("instance : ", instance);
   return (
     <div className="instance-container">
@@ -225,16 +234,30 @@ export function Instance() {
           </button>
         </div>
 
+        {error && (
+          <div className="action-message warning">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>{error}</span>
+          </div>
+        )}
+
         <div className="extensions-list">
           <div className="extensions-list-header">
             <h2>
               Extensions
               <span className="extension-count" title="Number of installed extensions">{extensions.length}</span>
             </h2>
-            <button onClick={handleSyncExtensions} className="sync-extensions-button" title="Synchronize extensions with Core Template">
+            <button 
+              onClick={() => setShowSyncConfirm(true)}
+              className={`sync-extensions-button ${isSyncing ? 'is-syncing' : ''}`}
+              disabled={isSyncing}
+              title="Synchronize extensions with Core Template"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M426.1 301.2C406.2 376.5 337.6 432 256 432c-51 0-96.9-21.7-129-56.3l41-41c5.1-5.1 8-12.1 8-19.3c0-15.1-12.2-27.3-27.3-27.3L48 288c-8.8 0-16 7.2-16 16l0 100.7C32 419.8 44.2 432 59.3 432c7.2 0 14.2-2.9 19.3-8l25.7-25.7C142.3 438.7 196.2 464 256 464c97.4 0 179.2-67 201.8-157.4c2.4-9.7-5.2-18.6-15.2-18.6c-7.8 0-14.5 5.6-16.5 13.2zM385 136.3l-41 41c-5.1 5.1-8 12.1-8 19.3c0 15.1 12.2 27.3 27.3 27.3L464 224c8.8 0 16-7.2 16-16l0-100.7C480 92.2 467.8 80 452.7 80c-7.2 0-14.2 2.9-19.3 8l-25.7 25.7C369.7 73.3 315.8 48 256 48C158.6 48 76.8 115 54.2 205.4c-2.4 9.7 5.2 18.6 15.2 18.6c7.8 0 14.5-5.6 16.5-13.2C105.8 135.5 174.4 80 256 80c51 0 96.9 21.7 129.1 56.3zM448 192l-73.4 0L448 118.6l0 73.4zM64 320l73.4 0L64 393.4 64 320z"/>
-              </svg> 
+              </svg>
               Sync with Core Template
             </button>
           </div>
@@ -285,6 +308,35 @@ export function Instance() {
           onSelect={handleColorSelect}
           onClose={() => setShowColorPicker(false)}
         />
+      )}
+
+      {showSyncConfirm && (
+        <div className="modal-overlay" onClick={() => setShowSyncConfirm(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Sync Extensions</h3>
+            <p>
+              This will synchronize extensions with the Core Template. Any instance-specific extensions will be preserved.
+              Are you sure you want to continue?
+            </p>
+            <div className="modal-actions">
+              <button 
+                className="modal-button cancel" 
+                onClick={() => setShowSyncConfirm(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="modal-button confirm" 
+                onClick={() => {
+                  setShowSyncConfirm(false);
+                  handleSyncExtensions();
+                }}
+              >
+                Sync Extensions
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
