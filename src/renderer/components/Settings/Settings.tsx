@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import './Settings.css';
 import { EditorInstance } from '../../../main/features/editor-instances/types';
+import { CONST_IPC_CHANNELS } from '../../../main/features/shared/constants/names';
 
 export function Settings() {
   const [templateInstance, setTemplateInstance] = useState<EditorInstance | null>(null);
 
   const createTemplateInstance = async () => {
-    const instance = await window.electron.ipcRenderer.invoke('create-editor-instance-template');
+    const instance = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.CREATE_EDITOR_INSTANCE_TEMPLATE);
     setTemplateInstance(instance);
   }
 
   const openTemplateInstance = async () => {
-    await window.electron.ipcRenderer.invoke('open-editor-instance', templateInstance?.id);
+    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.OPEN_EDITOR_INSTANCE, templateInstance?.id);
   }
 
   useEffect(() => {
     const fetchTemplateInstance = async () => {
-      const instance = await window.electron.ipcRenderer.invoke('get-template-instance');
+      const instance = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.GET_TEMPLATE_INSTANCE);
       setTemplateInstance(instance);
     }
     fetchTemplateInstance();

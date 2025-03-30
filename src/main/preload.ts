@@ -1,18 +1,19 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { CONST_IPC_CHANNELS } from './features/shared/constants/names';
 
 const channels = [
-  'open-editor',
-  'list-editor-instances',
-  'create-editor-instance',
-  'open-editor-instance',
-  'delete-editor-instance',
-  'get-instance-extensions',
-  'open-folder',
-  'create-editor-instance-template',
-  'get-template-instance',
-  'sync-extensions'
+  CONST_IPC_CHANNELS.OPEN_EDITOR,
+  CONST_IPC_CHANNELS.LIST_EDITOR_INSTANCES,
+  CONST_IPC_CHANNELS.CREATE_EDITOR_INSTANCE,
+  CONST_IPC_CHANNELS.OPEN_EDITOR_INSTANCE,
+  CONST_IPC_CHANNELS.DELETE_EDITOR_INSTANCE,
+  CONST_IPC_CHANNELS.GET_INSTANCE_EXTENSIONS,
+  CONST_IPC_CHANNELS.OPEN_FOLDER,
+  CONST_IPC_CHANNELS.CREATE_EDITOR_INSTANCE_TEMPLATE,
+  CONST_IPC_CHANNELS.GET_TEMPLATE_INSTANCE,
+  CONST_IPC_CHANNELS.SYNC_EXTENSIONS
 ] as const;
 
 type Channels = typeof channels[number];

@@ -9,12 +9,13 @@ import './App.css';
 import { EditorInstance } from '../main/features/editor-instances/types';
 import { signal } from '@preact/signals-react';
 import { useEffect } from 'react';
+import { CONST_IPC_CHANNELS } from '../main/features/shared/constants/names';
 
 
 export const instances = signal<EditorInstance[]>([]);
 
 export const loadInstances = async () => {
-  const list = await window.electron.ipcRenderer.invoke('list-editor-instances');
+  const list = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.LIST_EDITOR_INSTANCES);
   instances.value = list;
 };
 

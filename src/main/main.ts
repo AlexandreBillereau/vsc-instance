@@ -19,6 +19,7 @@ import VSCodeOpener from './vs-code-opener';
 import { InstanceManager } from './features/editor-instances/managers/instance-manager';
 import { EditorInstanceConfig } from './features/editor-instances/types';
 import { InstanceInfo } from './features/editor-instances/managers/instance-info';
+import { CONST_IPC_CHANNELS, CONST_NAMES } from './features/shared/constants/names';
 
 class AppUpdater {
   constructor() {
@@ -30,9 +31,7 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.handle('open-editor', () => {
-  // Copier le PATH du système
-  // Sur Windows
+ipcMain.handle(CONST_IPC_CHANNELS.OPEN_EDITOR, () => {
   VSCodeOpener.create().open();
 });
 
@@ -45,28 +44,28 @@ instanceManager.initialize().catch(error => {
 });
 
 // Exposer les méthodes via IPC
-ipcMain.handle('list-editor-instances', () => {
+ipcMain.handle(CONST_IPC_CHANNELS.LIST_EDITOR_INSTANCES, () => {
   return instanceManager.listInstances();
 });
 
-ipcMain.handle('create-editor-instance', (event, config: EditorInstanceConfig) => {
+ipcMain.handle(CONST_IPC_CHANNELS.CREATE_EDITOR_INSTANCE, (event, config: EditorInstanceConfig) => {
   return instanceManager.createInstance(config);
 });
 
-ipcMain.handle('open-editor-instance', (event, instanceId: string) => {
+ipcMain.handle(CONST_IPC_CHANNELS.OPEN_EDITOR_INSTANCE, (event, instanceId: string) => {
   return instanceManager.openInstance(instanceId);
 });
 
-ipcMain.handle('delete-editor-instance', (event, instanceId: string) => {
+ipcMain.handle(CONST_IPC_CHANNELS.DELETE_EDITOR_INSTANCE, (event, instanceId: string) => {
   return instanceManager.deleteInstance(instanceId);
 });
 
-ipcMain.handle('sync-extensions', (event, instanceId: string) => {
+ipcMain.handle(CONST_IPC_CHANNELS.SYNC_EXTENSIONS, (event, instanceId: string) => {
   return instanceManager.syncExtensions(instanceId);
 });
 
 // Nouveau handler pour récupérer les extensions
-ipcMain.handle('get-instance-extensions', async (event, instanceId: string) => {
+ipcMain.handle(CONST_IPC_CHANNELS.GET_INSTANCE_EXTENSIONS, async (event, instanceId: string) => {
   const instance = instanceManager.listInstances().find(i => i.id === instanceId);
   if (!instance) {
     throw new Error(`Instance ${instanceId} not found`);
@@ -83,7 +82,7 @@ ipcMain.handle('get-instance-extensions', async (event, instanceId: string) => {
   return extensionsWithDetails;
 });
 
-ipcMain.handle('open-folder', async (_event, path: string) => {
+ipcMain.handle(CONST_IPC_CHANNELS.OPEN_FOLDER, async (_event, path: string) => {
   try {
     await shell.openPath(path);
   } catch (error) {
@@ -92,11 +91,11 @@ ipcMain.handle('open-folder', async (_event, path: string) => {
   }
 });
 
-ipcMain.handle('create-editor-instance-template', () => {
+ipcMain.handle(CONST_IPC_CHANNELS.CREATE_EDITOR_INSTANCE_TEMPLATE, () => {
   return instanceManager.createInstanceTemplate();
 });
 
-ipcMain.handle('get-template-instance', () => {
+ipcMain.handle(CONST_IPC_CHANNELS.GET_TEMPLATE_INSTANCE, () => {
   return instanceManager.getTemplateInstance();
 });
 
