@@ -6,8 +6,6 @@
 }
 
 .new-editor-header {
-  position: sticky;
-  top: 0;
   background-color: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: 8px;
@@ -15,6 +13,44 @@
   margin-bottom: 1.5rem;
   z-index: 10;
   box-shadow: var(--shadow-card);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.import-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.import-button:hover {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.import-button svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
 }
 
 .new-editor-header h2 {
