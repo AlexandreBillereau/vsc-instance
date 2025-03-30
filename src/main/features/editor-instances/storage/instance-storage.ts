@@ -11,6 +11,16 @@ interface InstancesData {
   instances: EditorInstance[];
 }
 
+interface InstanceMetadata {
+  name: string;
+  type: 'vscode' | 'cursor';
+  icon?: {
+    title: string;
+    svg: string;
+  };
+  createdAt: string;
+}
+
 export class InstanceStorage {
   private static readonly DEFAULT_DATA: InstancesData = { instances: [] };
   private static readonly DEFAULT_TEMPLATE_DATA: EditorInstance;
@@ -229,25 +239,21 @@ export class InstanceStorage {
 
   /**
    * Exporte une instance
-   * use archiver to get a zip file of the instance
    */
   async exportInstance(instance: EditorInstance): Promise<void> {
-    // Demander à l'utilisateur où sauvegarder le fichier ZIP
     const { filePath } = await dialog.showSaveDialog({
       title: 'Export Instance',
       defaultPath: `${instance.name}-${instance.type}.zip`,
       filters: [{ name: 'ZIP Archive', extensions: ['zip'] }]
     });
 
-    if (!filePath) return; // L'utilisateur a annulé
+    if (!filePath) return;
 
-    // Créer le fichier ZIP
     const output = fs.createWriteStream(filePath);
     const archive = archiver('zip', {
-      zlib: { level: 9 } // Compression maximale
+      zlib: { level: 9 }
     });
 
-    // Gérer les événements du stream
     output.on('close', () => {
       console.log(`Archive créée: ${archive.pointer()} bytes total`);
     });
@@ -256,76 +262,108 @@ export class InstanceStorage {
       throw err;
     });
 
-    // Lier l'archive au stream de sortie
     archive.pipe(output);
 
-    // Ajouter le dossier de l'instance au ZIP
-    archive.directory(instance.instanceDir, false);
+    // Créer le fichier metadata.json
+    const metadata: InstanceMetadata = {
+      name: instance.name,
+      type: instance.type,
+      icon: instance.icon,
+      createdAt: instance.createdAt
+    };
 
-    // Finaliser l'archive
+    // Ajouter le fichier metadata.json
+    archive.append(JSON.stringify(metadata, null, 2), { name: 'metadata.json' });
+
+    // Ajouter le dossier de l'instance
+    archive.directory(instance.instanceDir, 'instance');
+
     await archive.finalize();
   }
 
   /**
- * Imports an instance from a ZIP file
- */
-async importInstance(): Promise<EditorInstance | null> {
-  // Demander à l'utilisateur de sélectionner le fichier ZIP
-  const { filePaths, canceled } = await dialog.showOpenDialog({
-    title: 'Import Instance',
-    filters: [{ name: 'ZIP Archive', extensions: ['zip'] }],
-    properties: ['openFile']
-  });
-
-  if (canceled || !filePaths || filePaths.length === 0) {
-    return null; // L'utilisateur a annulé, on retourne null
-  }
-
-  const zipPath = filePaths[0];
-  const instanceId = `instance-${Date.now()}`;
-  const instanceDir = path.join(APP_PATHS.INSTANCES_DIR, instanceId);
-
-  try {
-    // Extraire le ZIP
-    await new Promise<void>((resolve, reject) => {
-      const extract = require('extract-zip');
-      extract(zipPath, { dir: instanceDir })
-        .then(() => resolve())
-        .catch((err: Error) => reject(err));
+   * Importe une instance depuis un fichier ZIP
+   */
+  async importInstance(): Promise<EditorInstance | null> {
+    const { filePaths, canceled } = await dialog.showOpenDialog({
+      title: 'Import Instance',
+      filters: [{ name: 'ZIP Archive', extensions: ['zip'] }],
+      properties: ['openFile']
     });
 
-    // Lire le contenu du dossier extrait
-    const files = fs.readdirSync(instanceDir);
-    const extractedDir = path.join(instanceDir, files[0]); // Le dossier de l'instance est le premier élément
-
-    // Créer la nouvelle instance
-    const newInstance: EditorInstance = {
-      id: instanceId,
-      name: path.basename(zipPath, '.zip'), // Utiliser le nom du fichier ZIP comme nom d'instance
-      type: 'vscode', // Par défaut, on met vscode
-      instanceDir,
-      userDataDir: path.join(instanceDir, 'user-data'),
-      extensionsDir: path.join(instanceDir, 'extensions'),
-      workspaceFolder: undefined,
-      params: [],
-      createdAt: new Date().toISOString(),
-      lastUsed: new Date().toISOString(),
-      icon: undefined
-    };
-
-    // Ajouter l'instance à la liste
-    const instances = this.listInstances();
-    instances.push(newInstance);
-    this.saveInstances(instances);
-
-    return newInstance;
-  } catch (error) {
-    // En cas d'erreur, on nettoie le dossier créé
-    if (fs.existsSync(instanceDir)) {
-      FileSystem.removeDir(instanceDir);
+    if (canceled || !filePaths || filePaths.length === 0) {
+      return null;
     }
-    throw error;
+
+    const zipPath = filePaths[0];
+    const instanceId = `instance-${Date.now()}`;
+    const instanceDir = path.join(APP_PATHS.INSTANCES_DIR, instanceId);
+    const tempDir = path.join(APP_PATHS.INSTANCES_DIR, `temp-${instanceId}`);
+
+    try {
+      // Extraire d'abord dans un dossier temporaire
+      await new Promise<void>((resolve, reject) => {
+        const extract = require('extract-zip');
+        extract(zipPath, { dir: tempDir })
+          .then(() => resolve())
+          .catch((err: Error) => reject(err));
+      });
+
+      // Lire le fichier metadata.json
+      const metadataPath = path.join(tempDir, 'metadata.json');
+      let metadata: InstanceMetadata;
+      
+      if (fs.existsSync(metadataPath)) {
+        metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
+      } else {
+        // Fallback si pas de metadata
+        metadata = {
+          name: path.basename(zipPath, '.zip'),
+          type: 'vscode',
+          createdAt: new Date().toISOString()
+        };
+      }
+
+      // Déplacer le dossier instance vers son emplacement final
+      const instanceSourceDir = path.join(tempDir, 'instance');
+      fs.renameSync(instanceSourceDir, instanceDir);
+
+      // Créer la nouvelle instance avec les metadata
+      const newInstance: EditorInstance = {
+        id: instanceId,
+        name: metadata.name,
+        type: metadata.type,
+        instanceDir,
+        userDataDir: path.join(instanceDir, 'user-data'),
+        extensionsDir: path.join(instanceDir, 'extensions'),
+        workspaceFolder: undefined,
+        params: [],
+        createdAt: metadata.createdAt,
+        lastUsed: new Date().toISOString(),
+        icon: metadata.icon
+      };
+
+      // Ajouter l'instance à la liste
+      const instances = this.listInstances();
+      instances.push(newInstance);
+      this.saveInstances(instances);
+
+      return newInstance;
+    } catch (error) {
+      // Nettoyer en cas d'erreur
+      if (fs.existsSync(instanceDir)) {
+        FileSystem.removeDir(instanceDir);
+      }
+      if (fs.existsSync(tempDir)) {
+        FileSystem.removeDir(tempDir);
+      }
+      throw error;
+    } finally {
+      // Toujours nettoyer le dossier temporaire
+      if (fs.existsSync(tempDir)) {
+        FileSystem.removeDir(tempDir);
+      }
+    }
   }
-}
 
 } 
