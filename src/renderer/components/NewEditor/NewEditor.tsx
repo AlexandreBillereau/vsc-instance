@@ -4,6 +4,7 @@ import './NewEditor.css';
 import { loadInstances } from '../../App';
 import { IconPicker } from '../IconPicker/IconPicker';
 import { EditorInstance } from '../../../main/features/editor-instances/types';
+import { CONST_IPC_CHANNELS } from '../../../main/features/shared/constants/names';
 
 export function NewEditor() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export function NewEditor() {
       return;
     }
 
-    await window.electron.ipcRenderer.invoke('create-editor-instance', {
+    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.CREATE_EDITOR_INSTANCE, {
       name: name.trim(),
       type,
       icon: selectedIcon ? {
@@ -49,7 +50,7 @@ export function NewEditor() {
 
   useEffect(() => {
     const fetchTemplateInstance = async () => {
-      const instance = await window.electron.ipcRenderer.invoke('get-template-instance');
+      const instance = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.GET_TEMPLATE_INSTANCE);
       setTemplateInstance(instance);
     }
     fetchTemplateInstance();

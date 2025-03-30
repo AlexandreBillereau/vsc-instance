@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './Instance.css';
 import { loadInstances, instances } from '../../App';
 import { EditorInstance } from '../../../main/features/editor-instances/types';
+import { CONST_IPC_CHANNELS } from '../../../main/features/shared/constants/names';
 
 interface ExtensionMetadata {
   installedTimestamp: number;
@@ -38,7 +39,7 @@ export function Instance() {
 
   const loadExtensions = async () => {
     try {
-      const result = await window.electron.ipcRenderer.invoke('get-instance-extensions', id);
+      const result = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.GET_INSTANCE_EXTENSIONS, id);
       setExtensions(result);
       console.log(result);
     } catch (err) {
@@ -54,21 +55,21 @@ export function Instance() {
   }, [id]);
 
   const handleOpen = async () => {
-    await window.electron.ipcRenderer.invoke('open-editor-instance', id);
+    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.OPEN_EDITOR_INSTANCE, id);
   };
 
   const handleDelete = async () => {
-    await window.electron.ipcRenderer.invoke('delete-editor-instance', id);
+    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.DELETE_EDITOR_INSTANCE, id);
     loadInstances();
     navigate('/');
   };
 
   const handleOpenFolder = async (path: string) => {
-    await window.electron.ipcRenderer.invoke('open-folder', path);
+    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.OPEN_FOLDER, path);
   };
 
   const handleSyncExtensions = async () => {
-    await window.electron.ipcRenderer.invoke('sync-extensions', id);
+    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.SYNC_EXTENSIONS, id);
     loadExtensions();
   };
 
