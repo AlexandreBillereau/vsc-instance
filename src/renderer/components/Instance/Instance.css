@@ -476,8 +476,8 @@
 }
 
 .color-preview-button {
-  width: 100px;
-  height: 30px;
+  width: 30px;
+  height: 40px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.75rem;
