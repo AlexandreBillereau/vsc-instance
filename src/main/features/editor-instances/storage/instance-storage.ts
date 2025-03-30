@@ -239,6 +239,12 @@ export class InstanceStorage {
 
   /**
    * Exporte une instance
+   * logique : 
+   * 1. Créer un dossier temporaire
+   * 2. Copier le dossier de l'instance dans le dossier temporaire
+   * 3. Créer un fichier zip du dossier temporaire
+   * 4. Supprimer le dossier temporaire
+   * 5. Retourner le chemin du fichier zip
    */
   async exportInstance(instance: EditorInstance): Promise<void> {
     const { filePath } = await dialog.showSaveDialog({
@@ -283,6 +289,12 @@ export class InstanceStorage {
 
   /**
    * Importe une instance depuis un fichier ZIP
+   * logique : 
+   * 1. Ouvrir la boite de dialogue pour ouvrir le fichier ZIP
+   * 2. Extraire le contenu du fichier ZIP dans un dossier temporaire
+   * 3. Créer une nouvelle instance avec les metadata
+   * 4. Ajouter l'instance à la liste
+   * 5. Retourner l'instance
    */
   async importInstance(): Promise<EditorInstance | null> {
     const { filePaths, canceled } = await dialog.showOpenDialog({
