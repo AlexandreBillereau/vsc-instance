@@ -127,4 +127,24 @@ export class InstanceManager {
   syncExtensions(instanceId: string): Promise<boolean> {
     return this.storage.syncExtensions(instanceId);
   }
+
+  /**
+   * Exporte une instance
+   */
+  async exportInstance(instanceId: string): Promise<void> {
+    const instance = this.listInstances().find(i => i.id === instanceId);
+
+    if (!instance) {
+      throw new Error(`Instance ${instanceId} non trouvée`);
+    }
+
+    await this.storage.exportInstance(instance);
+  }
+
+  /**
+   * Importe une instance
+   */
+  async importInstance(): Promise<EditorInstance | null> {
+    return this.storage.importInstance();
+  }
 } 

@@ -48,18 +48,42 @@ export function NewEditor() {
     navigate('/');
   };
 
-  useEffect(() => {
-    const fetchTemplateInstance = async () => {
-      const instance = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.GET_TEMPLATE_INSTANCE);
-      setTemplateInstance(instance);
+  const handleImportInstance = async () => {
+    const result = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.IMPORT_INSTANCE);
+    if (result) {
+      loadInstances();
+      navigate('/');
     }
+  };
+
+  const fetchTemplateInstance = async () => {
+    const instance = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.GET_TEMPLATE_INSTANCE);
+    setTemplateInstance(instance);
+  }
+
+  useEffect(() => {
+    
     fetchTemplateInstance();
   }, []);
 
   return (
     <div className="new-editor-container">
       <div className="new-editor-header">
-        <h2>New Editor Instance</h2>
+        <div className="header-content">
+          <h2>New Editor Instance</h2>
+          <div className="header-actions">
+            <button 
+              type="button" 
+              onClick={handleImportInstance} 
+              className="import-button"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Import Instance
+            </button>
+          </div>
+        </div>
       </div>
       
       <form onSubmit={handleSubmit} className="new-editor-form">

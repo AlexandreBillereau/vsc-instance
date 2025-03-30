@@ -13,5 +13,7 @@ export const CONST_IPC_CHANNELS = {
   OPEN_FOLDER: 'open-folder',
   CREATE_EDITOR_INSTANCE_TEMPLATE: 'create-editor-instance-template',
   GET_TEMPLATE_INSTANCE: 'get-template-instance',
-  SYNC_EXTENSIONS: 'sync-extensions'
+  SYNC_EXTENSIONS: 'sync-extensions',
+  EXPORT_INSTANCE: 'export-instance',
+  IMPORT_INSTANCE: 'import-instance',
 }

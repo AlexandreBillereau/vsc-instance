@@ -171,6 +171,32 @@
   display: block;
 }
 
+.export-button {
+  color: var(--color-text);
+}
+
+.export-button:hover {
+  color: var(--color-primary);
+  background-color: var(--color-bg-tertiary);
+}
+
+.export-button .active-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  height: 40%;
+  background-color: var(--color-primary);
+  display: none;
+}
+
+.export-button:hover .active-indicator {
+  display: block;
+}
+
 .extensions-list {
   display: flex;
   flex-direction: column;

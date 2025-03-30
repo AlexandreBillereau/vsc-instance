@@ -73,6 +73,10 @@ export function Instance() {
     loadExtensions();
   };
 
+  const handleExportInstance = async () => {
+    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.EXPORT_INSTANCE, id);
+  };
+
   if (loading) {
     return <div className="loading">Loading extensions...</div>;
   }
@@ -88,7 +92,6 @@ export function Instance() {
         <div className="instance-header-top">
           <div className="instance-icon" dangerouslySetInnerHTML={{ __html: instance?.icon?.svg || '' }} />
           <h2>{instance?.name}</h2>
-         
         </div>
       </div>
 
@@ -170,6 +173,16 @@ export function Instance() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
               Launch Editor
+            </div>
+            <div className="active-indicator"></div>
+          </button>
+
+          <button onClick={handleExportInstance} className="action-button export-button">
+            <div className="button-content">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Export Instance
             </div>
             <div className="active-indicator"></div>
           </button>

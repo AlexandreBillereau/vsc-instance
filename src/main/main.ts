@@ -99,6 +99,14 @@ ipcMain.handle(CONST_IPC_CHANNELS.GET_TEMPLATE_INSTANCE, () => {
   return instanceManager.getTemplateInstance();
 });
 
+ipcMain.handle(CONST_IPC_CHANNELS.EXPORT_INSTANCE, (event, instanceId: string) => {
+  return instanceManager.exportInstance(instanceId);
+});
+
+ipcMain.handle(CONST_IPC_CHANNELS.IMPORT_INSTANCE, () => {
+  return instanceManager.importInstance();
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();

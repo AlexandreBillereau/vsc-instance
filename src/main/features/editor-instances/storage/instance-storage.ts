@@ -4,6 +4,8 @@ import { FileSystem } from '../../shared/utils/file-system';
 import { EditorInstance, EditorInstanceConfig } from '../types';
 import { CONST_NAMES } from '../../shared/constants/names';
 import * as fs from 'fs';
+import archiver from 'archiver';
+import { dialog } from 'electron';
 
 interface InstancesData {
   instances: EditorInstance[];
@@ -224,4 +226,106 @@ export class InstanceStorage {
 
     return true;
   }
+
+  /**
+   * Exporte une instance
+   * use archiver to get a zip file of the instance
+   */
+  async exportInstance(instance: EditorInstance): Promise<void> {
+    // Demander à l'utilisateur où sauvegarder le fichier ZIP
+    const { filePath } = await dialog.showSaveDialog({
+      title: 'Export Instance',
+      defaultPath: `${instance.name}-${instance.type}.zip`,
+      filters: [{ name: 'ZIP Archive', extensions: ['zip'] }]
+    });
+
+    if (!filePath) return; // L'utilisateur a annulé
+
+    // Créer le fichier ZIP
+    const output = fs.createWriteStream(filePath);
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // Compression maximale
+    });
+
+    // Gérer les événements du stream
+    output.on('close', () => {
+      console.log(`Archive créée: ${archive.pointer()} bytes total`);
+    });
+
+    archive.on('error', (err) => {
+      throw err;
+    });
+
+    // Lier l'archive au stream de sortie
+    archive.pipe(output);
+
+    // Ajouter le dossier de l'instance au ZIP
+    archive.directory(instance.instanceDir, false);
+
+    // Finaliser l'archive
+    await archive.finalize();
+  }
+
+  /**
+ * Imports an instance from a ZIP file
+ */
+async importInstance(): Promise<EditorInstance | null> {
+  // Demander à l'utilisateur de sélectionner le fichier ZIP
+  const { filePaths, canceled } = await dialog.showOpenDialog({
+    title: 'Import Instance',
+    filters: [{ name: 'ZIP Archive', extensions: ['zip'] }],
+    properties: ['openFile']
+  });
+
+  if (canceled || !filePaths || filePaths.length === 0) {
+    return null; // L'utilisateur a annulé, on retourne null
+  }
+
+  const zipPath = filePaths[0];
+  const instanceId = `instance-${Date.now()}`;
+  const instanceDir = path.join(APP_PATHS.INSTANCES_DIR, instanceId);
+
+  try {
+    // Extraire le ZIP
+    await new Promise<void>((resolve, reject) => {
+      const extract = require('extract-zip');
+      extract(zipPath, { dir: instanceDir })
+        .then(() => resolve())
+        .catch((err: Error) => reject(err));
+    });
+
+    // Lire le contenu du dossier extrait
+    const files = fs.readdirSync(instanceDir);
+    const extractedDir = path.join(instanceDir, files[0]); // Le dossier de l'instance est le premier élément
+
+    // Créer la nouvelle instance
+    const newInstance: EditorInstance = {
+      id: instanceId,
+      name: path.basename(zipPath, '.zip'), // Utiliser le nom du fichier ZIP comme nom d'instance
+      type: 'vscode', // Par défaut, on met vscode
+      instanceDir,
+      userDataDir: path.join(instanceDir, 'user-data'),
+      extensionsDir: path.join(instanceDir, 'extensions'),
+      workspaceFolder: undefined,
+      params: [],
+      createdAt: new Date().toISOString(),
+      lastUsed: new Date().toISOString(),
+      icon: undefined
+    };
+
+    // Ajouter l'instance à la liste
+    const instances = this.listInstances();
+    instances.push(newInstance);
+    this.saveInstances(instances);
+
+    return newInstance;
+  } catch (error) {
+    // En cas d'erreur, on nettoie le dossier créé
+    if (fs.existsSync(instanceDir)) {
+      FileSystem.removeDir(instanceDir);
+    }
+    throw error;
+  }
+}
+
 } 
