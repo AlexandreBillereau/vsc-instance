@@ -147,4 +147,11 @@ export class InstanceManager {
   async importInstance(): Promise<EditorInstance | null> {
     return this.storage.importInstance();
   }
+
+  /**
+   * Met à jour la couleur d'une instance
+   */
+  updateInstanceColor(instanceId: string, color: string): Promise<void> {
+    return this.storage.updateInstanceColor(instanceId, color);
+  }
 } 

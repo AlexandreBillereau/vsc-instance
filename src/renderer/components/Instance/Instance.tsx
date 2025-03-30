@@ -4,6 +4,7 @@ import './Instance.css';
 import { loadInstances, instances } from '../../App';
 import { EditorInstance } from '../../../main/features/editor-instances/types';
 import { CONST_IPC_CHANNELS } from '../../../main/features/shared/constants/names';
+import { ColorPicker } from './ColorPicker';
 
 interface ExtensionMetadata {
   installedTimestamp: number;
@@ -36,6 +37,7 @@ export function Instance() {
   const [extensions, setExtensions] = useState<Extension[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
   const loadExtensions = async () => {
     try {
@@ -77,6 +79,18 @@ export function Instance() {
     await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.EXPORT_INSTANCE, id);
   };
 
+  const handleColorSelect = async (color: string) => {
+    if (!instance) return;
+    
+    try {
+      await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.UPDATE_INSTANCE_COLOR, instance.id, color);
+      loadInstances();
+      setShowColorPicker(false);
+    } catch (error) {
+      console.error('Failed to update instance color:', error);
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading extensions...</div>;
   }
@@ -109,6 +123,19 @@ export function Instance() {
             <div className="instance-details-item">
               <span className="instance-details-label">Created:</span>
               <span className="instance-details-value">{new Date(instance?.createdAt || '').toLocaleDateString()}</span>
+            </div>
+            <div className="instance-details-item">
+              <span className="instance-details-label">Theme Color:</span>
+              <button
+                className="color-preview-button"
+                onClick={() => setShowColorPicker(true)}
+                style={{
+                  backgroundColor: instance?.color || 'transparent',
+                  border: instance?.color ? 'none' : '1px dashed var(--color-border)'
+                }}
+              >
+                {!instance?.color && 'Choose Color'}
+              </button>
             </div>
           </div>
           <div className="instance-folders">
@@ -252,6 +279,13 @@ export function Instance() {
           ))}
         </div>
       </div>
+
+      {showColorPicker && (
+        <ColorPicker
+          onSelect={handleColorSelect}
+          onClose={() => setShowColorPicker(false)}
+        />
+      )}
     </div>
   );
 } 
