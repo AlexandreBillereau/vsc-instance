@@ -1,5 +1,5 @@
 import { spawn } from 'child_process';
-import { EditorInstance, EditorInstanceConfig, EditorType } from '../types';
+import { EditorInstance, EditorInstanceConfig, EditorType, IPCResult } from '../types';
 import { InstanceStorage } from '../storage/instance-storage';
 import { VSCodeFinder } from '../finders/vscode-finder';
 import { CursorFinder } from '../finders/cursor-finder';
@@ -103,8 +103,8 @@ export class InstanceManager {
   /**
    * Supprime une instance
    */
-  deleteInstance(instanceId: string): void {
-    this.storage.deleteInstance(instanceId);
+  deleteInstance(instanceId: string): IPCResult {
+    return this.storage.deleteInstance(instanceId);
   }
 
   /**

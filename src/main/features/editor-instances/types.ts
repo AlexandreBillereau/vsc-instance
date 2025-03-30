@@ -29,3 +29,9 @@ export interface EditorInstance {
   };
   color?: string;
 } 
+
+export interface IPCResult {
+  success: boolean;
+  message?: string;
+  data?: any;
+}
