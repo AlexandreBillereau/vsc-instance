@@ -16,4 +16,5 @@ export const CONST_IPC_CHANNELS = {
   SYNC_EXTENSIONS: 'sync-extensions',
   EXPORT_INSTANCE: 'export-instance',
   IMPORT_INSTANCE: 'import-instance',
+  UPDATE_INSTANCE_COLOR: 'update-instance-color',
 }

@@ -27,4 +27,5 @@ export interface EditorInstance {
     title: string;
     svg: string;
   };
+  color?: string;
 } 

@@ -107,6 +107,10 @@ ipcMain.handle(CONST_IPC_CHANNELS.IMPORT_INSTANCE, () => {
   return instanceManager.importInstance();
 });
 
+ipcMain.handle(CONST_IPC_CHANNELS.UPDATE_INSTANCE_COLOR, (event, instanceId: string, color: string) => {
+  return instanceManager.updateInstanceColor(instanceId, color);
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();

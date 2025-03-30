@@ -21,6 +21,17 @@ interface InstanceMetadata {
   createdAt: string;
 }
 
+interface VSCodeSettings {
+  "workbench.colorCustomizations"?: {
+    "titleBar.activeBackground"?: string;
+    "titleBar.activeForeground"?: string;
+    "titleBar.inactiveBackground"?: string;
+    "titleBar.inactiveForeground"?: string;
+    [key: string]: string | undefined;
+  };
+  [key: string]: any;
+}
+
 export class InstanceStorage {
   private static readonly DEFAULT_DATA: InstancesData = { instances: [] };
   private static readonly DEFAULT_TEMPLATE_DATA: EditorInstance;
@@ -376,6 +387,79 @@ export class InstanceStorage {
         FileSystem.removeDir(tempDir);
       }
     }
+  }
+
+  /**
+   * Met à jour la couleur de la barre de titre VSCode
+   */
+  async updateInstanceColor(instanceId: string, color: string): Promise<void> {
+    const instance = this.listInstances().find(i => i.id === instanceId);
+    if (!instance) {
+      throw new Error(`Instance ${instanceId} non trouvée`);
+    }
+
+    // Mettre à jour le fichier settings.json de VSCode
+    const settingsPath = path.join(instance.userDataDir, 'User', 'settings.json');
+    let settings: VSCodeSettings = {};
+    
+    // Créer le dossier User s'il n'existe pas
+    FileSystem.ensureDir(path.dirname(settingsPath));
+
+    // Lire les paramètres existants s'ils existent
+    if (fs.existsSync(settingsPath)) {
+      settings = FileSystem.readJsonFile<VSCodeSettings>(settingsPath, {});
+    }
+
+    // Mettre à jour les paramètres de couleur
+    const updatedSettings: VSCodeSettings = {
+      ...settings,
+      "workbench.colorCustomizations": {
+        ...(settings["workbench.colorCustomizations"] || {}),
+        "titleBar.activeBackground": color,
+        "titleBar.activeForeground": this.getContrastColor(color),
+        "titleBar.inactiveBackground": this.adjustColorBrightness(color, -20),
+        "titleBar.inactiveForeground": this.adjustColorBrightness(this.getContrastColor(color), -20)
+      }
+    };
+
+    // Sauvegarder les paramètres
+    FileSystem.writeJsonFile(settingsPath, updatedSettings);
+
+    // Mettre à jour l'instance
+    instance.color = color;
+    this.updateInstance(instance);
+  }
+
+  /**
+   * Calcule la couleur de contraste (noir ou blanc) pour une couleur donnée
+   */
+  private getContrastColor(hexColor: string): string {
+    // Convertir la couleur hex en RGB
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+    
+    // Calculer la luminosité
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    
+    // Retourner blanc ou noir selon la luminosité
+    return luminance > 0.5 ? '#000000' : '#FFFFFF';
+  }
+
+  /**
+   * Ajuste la luminosité d'une couleur
+   */
+  private adjustColorBrightness(hexColor: string, percent: number): string {
+    const num = parseInt(hexColor.slice(1), 16);
+    const r = (num >> 16) + percent;
+    const g = ((num >> 8) & 0x00FF) + percent;
+    const b = (num & 0x0000FF) + percent;
+
+    const newR = Math.min(255, Math.max(0, r));
+    const newG = Math.min(255, Math.max(0, g));
+    const newB = Math.min(255, Math.max(0, b));
+
+    return `#${(newR << 16 | newG << 8 | newB).toString(16).padStart(6, '0')}`;
   }
 
 } 

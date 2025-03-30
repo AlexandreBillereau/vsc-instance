@@ -53,6 +53,7 @@
 
 .instance-details-group {
   display: flex;
+  flex-wrap: wrap;
   gap: 24px;
   margin-bottom: 8px;
 }
@@ -472,4 +473,25 @@
   width: 14px;
   height: 14px;
   fill: currentColor;
+}
+
+.color-preview-button {
+  width: 100px;
+  height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.color-preview-button:hover {
+  transform: scale(1.05);
+}
+
+.color-preview-button:active {
+  transform: scale(0.95);
 }
