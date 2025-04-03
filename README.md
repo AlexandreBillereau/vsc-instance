@@ -18,14 +18,27 @@
 
 </div>
 
-## ✨ Features
+## ✨ **Key Features**
 
-- 🚀 **Multiple Editor Instances**: Manage multiple VSCode and Cursor editor instances from a single interface
-- 🔄 **Smart Sync**: Synchronize extensions between instances and core template
-- 🎨 **Theme Customization**: Customize each instance with unique title bar colors
-- 📦 **Import/Export**: Share your editor setups with others through import/export functionality
-- 🔧 **Core Template**: Maintain a core template for consistent editor configurations
-- 🎯 **Instance-Specific Settings**: Keep workspace-specific settings and extensions separate
+### 🚀 **Multiple Editor Instances**
+- Launch and manage multiple VSCode and Cursor instances in parallel
+- Organize your work environments based on your projects
+
+### 🔄 **Smart Sync**
+- Use a core template to automatically install a set of base extensions
+- Each instance can have its own extensions without affecting others
+
+### 🎨 **Theme Customization**
+- Assign a unique name and color code to each instance
+- Change the title bar color for quick identification
+
+### 📦 **Import/Export Configurations**
+- Export your configurations to share them with your team
+- Import a configuration and instantly restore your ideal setup
+
+### 🎯 **Instance-Specific Settings**
+- Separate settings and extensions for each project
+- Ideal for testing new extensions without affecting your main environment
 
 ## 🖥️ Screenshots
 
