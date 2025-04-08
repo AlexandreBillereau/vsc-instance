@@ -4,6 +4,7 @@ import { InstanceStorage } from '../storage/instance-storage';
 import { VSCodeFinder } from '../finders/vscode-finder';
 import { CursorFinder } from '../finders/cursor-finder';
 import { CONST_NAMES } from '../../shared/constants/names';
+import path from 'path';
 
 export class InstanceManager {
   private storage: InstanceStorage;
@@ -67,10 +68,8 @@ export class InstanceManager {
       throw new Error(`Éditeur ${instance.type} non trouvé`);
     }
 
-    // Construire les arguments
     const args = ['--new-window'];
-    
-    // Ajouter les dossiers de configuration
+
     args.push(`--user-data-dir=${instance.userDataDir}`);
     args.push(`--extensions-dir=${instance.extensionsDir}`);
 
@@ -84,21 +83,26 @@ export class InstanceManager {
       args.push(...instance.params);
     }
 
-    // Lancer l'éditeur
-    const process = spawn(editorPath, args, {
+    //isolate the process from the parent process because the both are running with electron this app and the editors
+    const cleanEnv = { ...process.env };
+    delete cleanEnv.NODE_OPTIONS;
+    delete cleanEnv.ELECTRON_RUN_AS_NODE
+
+    const child = spawn(editorPath, args, {
       stdio: 'ignore',
-      windowsHide: false, //ne pas mettre a true, sinon y aura un proc invisible qui tourne
-      detached: true
+      windowsHide: false,
+      detached: true,
+      env: cleanEnv
     });
 
-    process.unref();
+    child.unref();
 
-    // Log pour debug
-    console.log('Lancement VS Code:', {
-      pid: process.pid,
-      path: editorPath,
-      args: args
-    });
+    // // Log pour debug
+    // console.log('Lancement VS Code:', {
+    //   pid: process.pid,
+    //   path: editorPath,
+    //   args: args
+    // });
 
     // Mettre à jour la date de dernière utilisation
     instance.lastUsed = new Date().toISOString();
