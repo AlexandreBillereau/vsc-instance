@@ -112,7 +112,12 @@ export function NewEditor() {
           <select
             id="type"
             value={type}
-            onChange={(e) => setType(e.target.value as 'vscode' | 'cursor')}
+            onChange={(e) => {
+              setType(e.target.value as 'vscode' | 'cursor');
+              if (type === 'cursor') {
+                setUseTemplate(false);
+              }
+            }}
           >
             <option value="vscode">VS Code</option>
             <option value="cursor">Cursor</option>
@@ -146,7 +151,7 @@ export function NewEditor() {
           </span>
         </div>
 
-        {templateInstance && (
+        {(templateInstance && type === 'vscode') && (
           <div className="form-group">
             <div className="checkbox-container">
               <input
