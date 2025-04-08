@@ -179,17 +179,14 @@
       "package.json"
     ],
     "mac": {
-      "sign": ".erb/scripts/notarize.js",
-      "icon": "assets/icon.icns",
       "notarize": false,
       "target": [
         "dmg",
         "zip"
       ],
+      "icon": "assets/icon.icns",
       "type": "distribution",
-      "hardenedRuntime": true,
-      "entitlements": "assets/entitlements.mac.plist",
-      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "hardenedRuntime": false,
       "gatekeeperAssess": false
     },
     "dmg": {
