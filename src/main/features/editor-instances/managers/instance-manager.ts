@@ -34,7 +34,14 @@ export class InstanceManager {
   /**
    * Crée une nouvelle instance
    */
-  async createInstance(config: EditorInstanceConfig): Promise<EditorInstance> {
+  async createInstance(config: EditorInstanceConfig): Promise<IPCResult> {
+    if (config.type === 'vscode' && !this.editorPaths.vscode) {
+      return { success: false, message: 'VSCode is not installed or not found, so we cannot create an instance. Please install it and relaunch the app.' };
+    }
+    if (config.type === 'cursor' && !this.editorPaths.cursor) {
+      return { success: false, message: 'Cursor is not installed or not found, so we cannot create an instance. Please install it and relaunch the app.' };
+    }
+
     return this.storage.createInstance(config);
   }
 
@@ -49,7 +56,6 @@ export class InstanceManager {
    * Ouvre une instance spécifique
    */
   async openInstance(instanceId: string): Promise<void> {
-    console.log(instanceId);
     const instance = instanceId === CONST_NAMES.TEMPLATE_SPLUG ? this.storage.getTemplateInstance() : this.storage.listInstances().find(i => i.id === instanceId);
 
     if (!instance) {
@@ -110,7 +116,12 @@ export class InstanceManager {
   /**
    * Crée une instance de template
    */
-  createInstanceTemplate(): Promise<EditorInstance> {
+  async createInstanceTemplate(): Promise<IPCResult> {
+
+    if (!this.editorPaths.vscode) {
+      return { success: false, message: 'VSCode is not installed or not found, so we cannot create an instance. Please install it and relaunch the app.' };
+    }
+
     return this.storage.createInstanceTemplate();
   }
 
