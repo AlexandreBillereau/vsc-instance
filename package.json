@@ -169,8 +169,8 @@
     "webpack-merge": "^6.0.1"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "Editor Instances",
+    "appId": "org.erb.EditorInstances",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
