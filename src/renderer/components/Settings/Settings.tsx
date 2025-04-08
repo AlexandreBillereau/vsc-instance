@@ -5,14 +5,25 @@ import { CONST_IPC_CHANNELS } from '../../../main/features/shared/constants/name
 
 export function Settings() {
   const [templateInstance, setTemplateInstance] = useState<EditorInstance | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const createTemplateInstance = async () => {
-    const instance = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.CREATE_EDITOR_INSTANCE_TEMPLATE);
-    setTemplateInstance(instance);
+    setError(null);
+    const result = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.CREATE_EDITOR_INSTANCE_TEMPLATE);
+    if (result.success) {
+      setTemplateInstance(result.data);
+    } else {
+      setError(result.message || 'Failed to create template instance');
+    }
   }
 
   const openTemplateInstance = async () => {
-    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.OPEN_EDITOR_INSTANCE, templateInstance?.id);
+    setError(null);
+    try {
+      await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.OPEN_EDITOR_INSTANCE, templateInstance?.id);
+    } catch (err) {
+      setError('Failed to open template instance');
+    }
   }
 
   useEffect(() => {
@@ -69,6 +80,17 @@ export function Settings() {
             </div>
           </div>
         </div>
+
+        {error && (
+          <div className="error-message">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12" y2="16" />
+            </svg>
+            {error}
+          </div>
+        )}
 
         <div className="template-actions">
           {templateInstance ? (

@@ -50,56 +50,62 @@ export class InstanceStorage {
   /**
    * Crée une nouvelle instance
    */
-  async createInstance(config: EditorInstanceConfig): Promise<EditorInstance> {
+  async createInstance(config: EditorInstanceConfig): Promise<IPCResult> {
     const instances = this.listInstances();
     const instanceId = `instance-${Date.now()}`;
-    
-    // Créer les dossiers pour cette instance
-    const instanceDir = path.join(APP_PATHS.INSTANCES_DIR, instanceId);
-    const userDataDir = path.join(instanceDir, 'user-data');
-    const extensionsDir = path.join(instanceDir, 'extensions');
-    
-    if (config.useTemplate) {
-      const templateInstance = this.getTemplateInstance();
-      FileSystem.copyDir(templateInstance.userDataDir, userDataDir);
-      FileSystem.copyDir(templateInstance.extensionsDir, extensionsDir);
-    } else {
-      FileSystem.ensureDir(userDataDir);
-      FileSystem.ensureDir(extensionsDir);
+    try{
+      // Créer les dossiers pour cette instance
+      const instanceDir = path.join(APP_PATHS.INSTANCES_DIR, instanceId);
+      const userDataDir = path.join(instanceDir, 'user-data');
+      const extensionsDir = path.join(instanceDir, 'extensions');
+      
+      if (config.useTemplate) {
+        const templateInstance = this.getTemplateInstance();
+        FileSystem.copyDir(templateInstance.userDataDir, userDataDir);
+        FileSystem.copyDir(templateInstance.extensionsDir, extensionsDir);
+      } else {
+        FileSystem.ensureDir(userDataDir);
+        FileSystem.ensureDir(extensionsDir);
+      }
+
+      const newInstance: EditorInstance = {
+        id: instanceId,
+        name: config.name,
+        type: config.type,
+        instanceDir,
+        userDataDir,
+        extensionsDir,
+        workspaceFolder: config.workspaceFolder,
+        params: config.params || [],
+        createdAt: new Date().toISOString(),
+        lastUsed: new Date().toISOString(),
+        icon: config.icon
+      };
+
+      instances.push(newInstance);
+      this.saveInstances(instances);
+
+      return { success: true, message: 'Instance created', data: newInstance };
+    } catch (error) {
+      //reverse and remove the instance if it was created
+      this.deleteInstance(instanceId);
+      return { success: false, message: 'Error creating instance ' + error };
     }
-
-    const newInstance: EditorInstance = {
-      id: instanceId,
-      name: config.name,
-      type: config.type,
-      instanceDir,
-      userDataDir,
-      extensionsDir,
-      workspaceFolder: config.workspaceFolder,
-      params: config.params || [],
-      createdAt: new Date().toISOString(),
-      lastUsed: new Date().toISOString(),
-      icon: config.icon
-    };
-
-    instances.push(newInstance);
-    this.saveInstances(instances);
-
-    return newInstance;
   }
 
   /**
    * Crée une instance de template
    */
-  async createInstanceTemplate(): Promise<EditorInstance> {
+  async createInstanceTemplate(): Promise<IPCResult> {
     // Créer les dossiers pour cette instance
     const instanceDir = path.join(APP_PATHS.INSTANCE_TEMPLATE_DIR, CONST_NAMES.TEMPLATE_SPLUG);
     const userDataDir = path.join(instanceDir, 'user-data');
     const extensionsDir = path.join(instanceDir, 'extensions');
-    
-    //on s'assure que les dossiers existent sinon on les crée
-    FileSystem.ensureDir(userDataDir);
-    FileSystem.ensureDir(extensionsDir);
+
+    try {
+      //on s'assure que les dossiers existent sinon on les crée
+      FileSystem.ensureDir(userDataDir);
+      FileSystem.ensureDir(extensionsDir);
 
     //on crée l'instance
     const instance: EditorInstance = {
@@ -118,7 +124,12 @@ export class InstanceStorage {
 
     this.saveTemplateInstance(instance);
 
-    return instance;
+      return { success: true, message: 'Instance template created', data: instance };
+    } catch (error) {
+      //reverse and remove the instance if it was created
+      this.deleteInstance(CONST_NAMES.TEMPLATE_SPLUG);
+      return { success: false, message: 'Error creating instance template' };
+    }
   }
 
   /**

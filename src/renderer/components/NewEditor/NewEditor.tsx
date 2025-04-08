@@ -15,6 +15,7 @@ export function NewEditor() {
   const [selectedIcon, setSelectedIcon] = useState<{ title: string; svg: string } | null>(null);
   const [templateInstance, setTemplateInstance] = useState<EditorInstance | null>(null);
   const [errors, setErrors] = useState<{ name?: string; type?: string }>({});
+  const [generalError, setGeneralError] = useState<string | null>(null);
 
   const validateForm = () => {
     const newErrors: { name?: string; type?: string } = {};
@@ -29,12 +30,13 @@ export function NewEditor() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setGeneralError(null);
     
     if (!validateForm()) {
       return;
     }
 
-    await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.CREATE_EDITOR_INSTANCE, {
+    const result = await window.electron.ipcRenderer.invoke(CONST_IPC_CHANNELS.CREATE_EDITOR_INSTANCE, {
       name: name.trim(),
       type,
       icon: selectedIcon ? {
@@ -44,8 +46,12 @@ export function NewEditor() {
       useTemplate
     });
 
-    loadInstances();
-    navigate('/');
+    if (result.success) {
+      loadInstances();
+      navigate('/');
+    } else {
+      setGeneralError(result.message || 'An error occurred while creating the instance');
+    }
   };
 
   const handleImportInstance = async () => {
@@ -165,6 +171,17 @@ export function NewEditor() {
             <span className="field-description">
               Start with extensions and settings from your Core Template. Recommended for consistency across instances.
             </span>
+          </div>
+        )}
+
+        {generalError && (
+          <div className="error-message">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12" y2="16" />
+            </svg>
+            {generalError}
           </div>
         )}
 
