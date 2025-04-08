@@ -94,16 +94,11 @@ export function Home() {
 
       <div className="instances-grid">
         {instances.value.map((instance) => (
+          console.log(instance),
           <div key={instance.id} className="instance-card" onClick={() => navigate(`/instance/${instance.id}`)}>
             <div className="instance-icon">
-              {instance.type === 'vscode' ? (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7L12 3L4 7M20 7L12 11M20 7V17L12 21M12 11L4 7M12 11V21M4 7V17L12 21" />
-                </svg>
-              ) : (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
+              {instance.icon?.svg && (
+                <div dangerouslySetInnerHTML={{ __html: instance.icon.svg }} />
               )}
             </div>
             <div className="instance-info">
