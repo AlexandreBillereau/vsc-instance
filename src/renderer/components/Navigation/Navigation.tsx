@@ -57,7 +57,7 @@ export function Navigation() {
       <div className="nav-header">
         <div className="nav-header-top">
           <a 
-            href="https://github.com/yourusername/editors-instance" 
+            href="https://github.com/AlexandreBillereau/vsc-instance" 
             target="_blank" 
             rel="noopener noreferrer"
             className="github-link"
@@ -78,7 +78,6 @@ export function Navigation() {
       <div className="nav-content">
         <div className="instances-section">
           {instances.value.map(instance => (
-            console.log(instance),
             <NavLink 
               key={instance.id}
               to={`/instance/${instance.id}`} 
