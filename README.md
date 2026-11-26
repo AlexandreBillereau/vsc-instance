@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AlexandreBillereau/vsc-instance/actions/workflows/build.yml"><img src="https://github.com/AlexandreBillereau/vsc-instance/actions/workflows/build.yml/badge.svg" alt="Build"/></a>
+  <a href="https://github.com/AlexandreBillereau/vsc-instance/actions/workflows/build.yml"><img src="https://github.com/AlexandreBillereau/vsc-instance/actions/workflows/build.yml/badge.svg" alt="CI"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT licence"/></a>
   <img src="https://img.shields.io/badge/Electron-React%20%2B%20TypeScript-47848F" alt="Electron, React, TypeScript"/>
 </p>
@@ -60,8 +60,11 @@ git clone https://github.com/AlexandreBillereau/vsc-instance.git
 cd vsc-instance
 npm install
 npm start          # development
+npm test           # Jest: renderer smoke test + main-process unit tests
 npm run package    # build an installer for the current OS (dmg / exe / deb)
 ```
+
+CI runs type-checking, tests and a production build on Linux, macOS and Windows for every push.
 
 ## Roadmap
 

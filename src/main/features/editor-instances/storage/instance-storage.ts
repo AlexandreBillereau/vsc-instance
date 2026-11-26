@@ -303,7 +303,7 @@ export class InstanceStorage {
       console.log(`Archive créée: ${archive.pointer()} bytes total`);
     });
 
-    archive.on('error', (err) => {
+    archive.on('error', (err: Error) => {
       throw err;
     });
 

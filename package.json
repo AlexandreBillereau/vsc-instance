@@ -21,8 +21,7 @@
     "email": "alexandre.billereau@gmail.com",
     "url": "https://github.com/AlexandreBillereau"
   },
-  "contributors": [
-  ],
+  "contributors": [],
   "main": "./.erb/dll/main.bundle.dev.js",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
@@ -80,15 +79,24 @@
     ],
     "testEnvironment": "jsdom",
     "testEnvironmentOptions": {
-      "url": "http://localhost/"
+      "url": "http://localhost/",
+      "customExportConditions": [
+        "require",
+        "node",
+        "default"
+      ]
     },
     "testPathIgnorePatterns": [
       "release/app/dist",
-      ".erb/dll"
+      ".erb/dll",
+      "setupTests.ts"
     ],
     "transform": {
       "\\.(ts|tsx|js|jsx)$": "ts-jest"
-    }
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/__tests__/setupTests.ts"
+    ]
   },
   "dependencies": {
     "@electron/notarize": "^3.0.0",
@@ -110,6 +118,7 @@
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
+    "@types/archiver": "^5.3.4",
     "@types/jest": "^29.5.14",
     "@types/node": "22.13.10",
     "@types/react": "^19.0.11",
